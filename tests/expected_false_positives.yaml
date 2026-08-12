@@ -1,5 +1,27 @@
 # Patterns/fixtures ("safe" examples) that must NOT produce a confirmed
-# finding. Used to measure false-positive rate.
+# finding. Used to measure false-positive rate. Keyed by eval case id (see
+# eval_cases.yaml) -- test_runner.py checks that a full pipeline run against
+# each safe_path produces NO CONFIRMED finding in the given category (a
+# REJECTED or absent candidate is the correct outcome).
 version: "0.1.0"
 
-false_positives: {}
+false_positives:
+  sql-injection-001:
+    category: sql-injection
+    location_file: fixtures/sql-injection/safe/app.py
+    why_safe: "order_id is bound as a parameter, never concatenated into the query string -- see skills/injection-review/references/sql-injection.md"
+
+  xss-001:
+    category: reflected-xss
+    location_file: fixtures/xss/safe/app.py
+    why_safe: "no `| safe` filter -- rendered through Jinja2 default auto-escaping -- see skills/web-security-review/references/xss.md"
+
+  secrets-001:
+    category: hardcoded-credential-live
+    location_file: fixtures/secrets/safe/config.py
+    why_safe: "credentials sourced from os.environ, no secret value present in source -- see skills/secrets-detection/SKILL.md"
+
+  idor-001:
+    category: broken-object-level-authorization
+    location_file: fixtures/idor/safe/app.py
+    why_safe: "lookup scoped to the authenticated caller via find_invoice_for_owner -- see skills/api-security-review/references/bola-idor.md"

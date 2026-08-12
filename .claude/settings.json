@@ -1,74 +1,74 @@
-// {
-//   "$schema": "https://json.schemastore.org/claude-code-settings.json",
+{
+  "$schema": "https://json.schemastore.org/claude-code-settings.json",
 
-//   "permissions": {
-//     "defaultMode": "plan",
+  "permissions": {
+    "defaultMode": "plan",
 
-//     "allow": [
-//       "Read",
-//       "Glob",
-//       "Grep"
-//     ],
+    "allow": [
+      "Read",
+      "Glob",
+      "Grep"
+    ],
 
-//     "deny": [
-//       "Edit",
-//       "Write",
-//       "NotebookEdit",
+    "deny": [
+      "Edit",
+      "Write",
+      "NotebookEdit",
 
-//       "Bash(git add *)",
-//       "Bash(git commit *)",
-//       "Bash(git push *)",
-//       "Bash(git reset *)",
-//       "Bash(git restore *)",
-//       "Bash(git checkout *)",
-//       "Bash(git switch *)",
-//       "Bash(git clean *)",
+      "Bash(git add *)",
+      "Bash(git commit *)",
+      "Bash(git push *)",
+      "Bash(git reset *)",
+      "Bash(git restore *)",
+      "Bash(git checkout *)",
+      "Bash(git switch *)",
+      "Bash(git clean *)",
 
-//       "Bash(rm *)",
-//       "Bash(mv *)",
-//       "Bash(cp *)",
-//       "Bash(mkdir *)",
-//       "Bash(touch *)",
+      "Bash(rm *)",
+      "Bash(mv *)",
+      "Bash(cp *)",
+      "Bash(mkdir *)",
+      "Bash(touch *)",
 
-//       "Bash(npm install *)",
-//       "Bash(npm uninstall *)",
-//       "Bash(npm update *)",
-//       "Bash(npx * --fix *)",
+      "Bash(npm install *)",
+      "Bash(npm uninstall *)",
+      "Bash(npm update *)",
+      "Bash(npx * --fix *)",
 
-//       "Bash(yarn add *)",
-//       "Bash(yarn remove *)",
+      "Bash(yarn add *)",
+      "Bash(yarn remove *)",
 
-//       "Bash(pnpm add *)",
-//       "Bash(pnpm remove *)",
+      "Bash(pnpm add *)",
+      "Bash(pnpm remove *)",
 
-//       "Bash(pip install *)",
-//       "Bash(pip uninstall *)",
+      "Bash(pip install *)",
+      "Bash(pip uninstall *)",
 
-//       "Bash(poetry add *)",
-//       "Bash(poetry remove *)",
+      "Bash(poetry add *)",
+      "Bash(poetry remove *)",
 
-//       "Bash(mvn versions:*)",
-//       "Bash(gradle * --write-*)",
+      "Bash(mvn versions:*)",
+      "Bash(gradle * --write-*)",
 
-//       "Bash(semgrep * --autofix *)",
+      "Bash(semgrep * --autofix *)",
 
-//       "Bash(docker build *)",
-//       "Bash(docker push *)",
+      "Bash(docker build *)",
+      "Bash(docker push *)",
 
-//       "Bash(kubectl apply *)",
-//       "Bash(kubectl create *)",
-//       "Bash(kubectl delete *)",
-//       "Bash(kubectl edit *)",
-//       "Bash(kubectl patch *)",
+      "Bash(kubectl apply *)",
+      "Bash(kubectl create *)",
+      "Bash(kubectl delete *)",
+      "Bash(kubectl edit *)",
+      "Bash(kubectl patch *)",
 
-//       "Bash(terraform apply *)",
-//       "Bash(terraform destroy *)",
+      "Bash(terraform apply *)",
+      "Bash(terraform destroy *)",
 
-//       "Bash(gh pr merge *)",
-//       "Bash(gh pr create *)",
-//       "Bash(gh release create *)"
-//     ]
-//   },
+      "Bash(gh pr merge *)",
+      "Bash(gh pr create *)",
+      "Bash(gh release create *)"
+    ]
+  },
 
-//   "disableBypassPermissionsMode": "disable"
-// }
+  "disableBypassPermissionsMode": "disable"
+}

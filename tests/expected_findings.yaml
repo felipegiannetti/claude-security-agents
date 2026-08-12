@@ -1,5 +1,33 @@
 # Ground-truth findings expected from the "vulnerable" fixtures.
-# Keyed by eval case id (see eval_cases.yaml).
+# Keyed by eval case id (see eval_cases.yaml). test_runner.py checks that a
+# full pipeline run against each vulnerable_path produces a CONFIRMED
+# finding matching these expectations (category + minimum severity).
 version: "0.1.0"
 
-findings: {}
+findings:
+  sql-injection-001:
+    category: sql-injection
+    cwe: CWE-89
+    min_severity: critical
+    location_file: fixtures/sql-injection/vulnerable/app.py
+    location_function: get_order
+
+  xss-001:
+    category: reflected-xss
+    cwe: CWE-79
+    min_severity: medium
+    location_file: fixtures/xss/vulnerable/app.py
+    location_function: search
+
+  secrets-001:
+    category: hardcoded-credential-live
+    cwe: CWE-798
+    min_severity: high
+    location_file: fixtures/secrets/vulnerable/config.py
+
+  idor-001:
+    category: broken-object-level-authorization
+    cwe: CWE-862
+    min_severity: high
+    location_file: fixtures/idor/vulnerable/app.py
+    location_function: get_invoice

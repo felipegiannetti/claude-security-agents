@@ -1,11 +1,39 @@
 # Enumerates test cases: which fixture maps to which expected outcome.
-# Consumed by test_runner.py.
+# Consumed by test_runner.py. Each "vulnerable" fixture should be flagged
+# (see expected_findings.yaml); each "safe" fixture should NOT be (see
+# expected_false_positives.yaml) -- a Skill that flags the safe fixture is
+# producing a false positive on its own documented false-positive condition.
 version: "0.1.0"
 
-cases: []
+cases:
+  - id: sql-injection-001
+    category: sql-injection
+    vulnerable_path: fixtures/sql-injection/vulnerable/app.py
+    safe_path: fixtures/sql-injection/safe/app.py
+    skill: injection-review
+    reference: skills/injection-review/references/sql-injection.md
+    scanner: semgrep
 
-# TODO: e.g.
-# cases:
-#   - id: sql-injection-001
-#     path: fixtures/sql-injection/vulnerable/example.py
-#     expect: expected_findings.yaml#sql-injection-001
+  - id: xss-001
+    category: reflected-xss
+    vulnerable_path: fixtures/xss/vulnerable/app.py
+    safe_path: fixtures/xss/safe/app.py
+    skill: web-security-review
+    reference: skills/web-security-review/references/xss.md
+    scanner: semgrep
+
+  - id: secrets-001
+    category: hardcoded-credential-live
+    vulnerable_path: fixtures/secrets/vulnerable/config.py
+    safe_path: fixtures/secrets/safe/config.py
+    skill: secrets-detection
+    reference: skills/secrets-detection/references/cloud-credentials.md
+    scanner: gitleaks
+
+  - id: idor-001
+    category: broken-object-level-authorization
+    vulnerable_path: fixtures/idor/vulnerable/app.py
+    safe_path: fixtures/idor/safe/app.py
+    skill: api-security-review
+    reference: skills/api-security-review/references/bola-idor.md
+    scanner: null  # not scanner-detectable -- requires LLM review (06_llm_security_review)
