@@ -1,8 +1,72 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://security-review-agent/schemas/report.schema.json",
-  "title": "Report",
+  "title": "Final Security Report",
+  "description": "Output of 11_final_report. Structured contract behind the Markdown/JSON/SARIF renderers. See CLAUDE.md 'Final Security Report'.",
   "type": "object",
-  "properties": {},
-  "required": []
+  "properties": {
+    "metadata": {
+      "type": "object",
+      "properties": {
+        "generated_at": { "type": "string", "format": "date-time" },
+        "repository": { "type": "string" },
+        "review_scope": { "type": "string", "enum": ["full-repository", "diff", "pull-request"] },
+        "pipeline_version": { "type": "string" }
+      }
+    },
+    "executive_summary": {
+      "type": "object",
+      "properties": {
+        "overview": { "type": "string" },
+        "overall_risk": { "type": "string", "enum": ["critical", "high", "medium", "low"] },
+        "security_posture_score": { "type": "number", "minimum": 0, "maximum": 100 },
+        "top_priorities": {
+          "type": "array",
+          "items": { "type": "string", "description": "SEC-NNN references, ordered." }
+        }
+      },
+      "required": ["overview", "overall_risk"]
+    },
+    "finding_counts": {
+      "type": "object",
+      "properties": {
+        "by_severity": {
+          "type": "object",
+          "properties": {
+            "critical": { "type": "integer" },
+            "high": { "type": "integer" },
+            "medium": { "type": "integer" },
+            "low": { "type": "integer" },
+            "informational": { "type": "integer" }
+          }
+        },
+        "by_priority": {
+          "type": "object",
+          "properties": {
+            "P0": { "type": "integer" },
+            "P1": { "type": "integer" },
+            "P2": { "type": "integer" },
+            "P3": { "type": "integer" },
+            "P4": { "type": "integer" }
+          }
+        },
+        "rejected_as_false_positive": { "type": "integer" }
+      }
+    },
+    "confirmed_findings": {
+      "type": "array",
+      "items": { "$ref": "finding.schema.json" }
+    },
+    "remediation_roadmap": {
+      "type": "object",
+      "properties": {
+        "immediate": { "type": "array", "items": { "type": "string" } },
+        "short_term": { "type": "array", "items": { "type": "string" } },
+        "medium_term": { "type": "array", "items": { "type": "string" } },
+        "hardening": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "final_conclusion": { "type": "string" }
+  },
+  "required": ["metadata", "executive_summary", "finding_counts", "confirmed_findings"]
 }

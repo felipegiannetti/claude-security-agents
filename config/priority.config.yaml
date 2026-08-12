@@ -14,7 +14,48 @@ levels:
   - id: P4
     label: Informational
 
-# TODO: weighting of severity, exploitability, exposure, confidence, effort.
+# Weighting used by scripts/reporting/calculate_priorities.py. Priority is a
+# function of severity plus these modifiers -- it is not just severity
+# relabeled. Weights are additive score adjustments on top of a severity base
+# score (critical=100, high=75, medium=50, low=25, informational=0), then
+# bucketed into P0-P4 by the thresholds below.
+weights:
+  exploitability:
+    proof_of_concept_available: +15
+    trivial_to_exploit: +10
+    requires_chained_conditions: -10
+  exposure:
+    internet_facing_unauthenticated: +20
+    internet_facing_authenticated: +10
+    internal_only: -10
+  privileges_required:
+    none: +10
+    user: 0
+    privileged_or_admin: -15
+  affected_data_sensitivity:
+    payment_or_credentials: +15
+    pii_or_health: +10
+    none: 0
+  blast_radius:
+    single_tenant_or_user: 0
+    multi_tenant: +15
+    platform_wide: +25
+  confidence:
+    HIGH: 0
+    MEDIUM: -10
+    LOW: -25          # LOW confidence findings should rarely reach P0/P1 regardless of severity
+  remediation_effort:
+    trivial: +10       # cheap fixes get a small urgency boost -- no excuse to delay
+    small: +5
+    medium: 0
+    large: -5
+
+score_thresholds:
+  P0: 90
+  P1: 65
+  P2: 40
+  P3: 15
+  P4: 0
 
 # CISA KEV is an exploitability signal, not a severity signal: a KEV-listed
 # CVE is confirmed to be actively exploited in the wild, regardless of its

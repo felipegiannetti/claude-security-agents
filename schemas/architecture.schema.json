@@ -1,8 +1,176 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://security-review-agent/schemas/architecture.schema.json",
-  "title": "Architecture",
+  "title": "Architecture Model",
+  "description": "Output of agents/architecture-mapper.md (stage 02_architecture_discovery). The architectural context every later stage depends on.",
   "type": "object",
-  "properties": {},
-  "required": []
+  "properties": {
+    "repository": {
+      "type": "object",
+      "properties": {
+        "remote": { "type": "string" },
+        "default_branch": { "type": "string" },
+        "commit": { "type": "string" },
+        "review_scope": { "type": "string", "enum": ["full-repository", "diff", "pull-request"] }
+      }
+    },
+    "languages": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": { "type": "string" },
+          "role": { "type": "string", "enum": ["primary", "secondary"] },
+          "evidence": { "type": "array", "items": { "type": "string" } }
+        },
+        "required": ["name"]
+      }
+    },
+    "frameworks": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": { "type": "string" },
+          "kind": { "type": "string", "enum": ["web", "orm", "template-engine", "rpc", "graphql", "other"] },
+          "evidence": { "type": "array", "items": { "type": "string" } }
+        },
+        "required": ["name"]
+      }
+    },
+    "components": {
+      "type": "array",
+      "description": "Services/modules and how they communicate.",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": { "type": "string" },
+          "type": { "type": "string", "enum": ["service", "module", "background-job", "scheduled-task", "worker"] },
+          "communicates_via": { "type": "array", "items": { "type": "string" } }
+        },
+        "required": ["name"]
+      }
+    },
+    "entry_points": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "type": { "type": "string", "enum": ["rest", "graphql", "websocket", "webhook", "cli", "queue-consumer", "batch-job", "admin-interface"] },
+          "path_or_command": { "type": "string" },
+          "file": { "type": "string" },
+          "authentication": { "type": "string" },
+          "authorization": { "type": "string" }
+        },
+        "required": ["type", "file"]
+      }
+    },
+    "data_stores": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": { "type": "string" },
+          "kind": { "type": "string", "enum": ["relational-db", "document-db", "cache", "search", "object-storage", "queue"] },
+          "holds_sensitive_data": { "type": "boolean" }
+        },
+        "required": ["name", "kind"]
+      }
+    },
+    "authentication_mechanisms": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "type": { "type": "string", "enum": ["session", "jwt", "oauth2", "oidc", "api-key", "mtls", "sso", "custom"] },
+          "implementation": { "type": "string", "description": "Framework/library vs. custom code." },
+          "covers_entry_points": { "type": "array", "items": { "type": "string" } }
+        },
+        "required": ["type"]
+      }
+    },
+    "authorization_mechanisms": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "type": { "type": "string", "enum": ["rbac", "abac", "ownership-check", "tenant-isolation", "policy-engine", "custom"] },
+          "enforcement_layer": { "type": "string", "enum": ["middleware", "controller", "service", "data-layer"] }
+        },
+        "required": ["type"]
+      }
+    },
+    "external_integrations": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": { "type": "string" },
+          "kind": { "type": "string", "enum": ["payment-processor", "identity-provider", "third-party-api", "cloud-sdk", "outbound-webhook"] }
+        },
+        "required": ["name", "kind"]
+      }
+    },
+    "infrastructure": {
+      "type": "object",
+      "properties": {
+        "containerization": { "type": "array", "items": { "type": "string" } },
+        "orchestration": { "type": "array", "items": { "type": "string" } },
+        "iac": { "type": "array", "items": { "type": "string" } },
+        "ci_cd": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "dependencies": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "ecosystem": { "type": "string", "enum": ["npm", "pip", "maven", "gradle", "nuget", "other"] },
+          "manifest_file": { "type": "string" },
+          "lockfile": { "type": "string" }
+        },
+        "required": ["ecosystem", "manifest_file"]
+      }
+    },
+    "sensitive_data": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "category": { "type": "string", "enum": ["pii", "credentials", "payment-data", "health-data", "secrets", "other"] },
+          "where": { "type": "array", "items": { "type": "string" } }
+        },
+        "required": ["category"]
+      }
+    },
+    "trust_boundaries": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": { "type": "string" },
+          "less_trusted_side": { "type": "string" },
+          "more_trusted_side": { "type": "string" }
+        },
+        "required": ["name"]
+      }
+    },
+    "existing_security_controls": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "type": { "type": "string" },
+          "location": { "type": "string" }
+        },
+        "required": ["type"]
+      }
+    },
+    "notable_observations": {
+      "type": "array",
+      "description": "Architecturally notable items for the reviewer to pay attention to. Not findings.",
+      "items": { "type": "string" }
+    }
+  },
+  "required": ["languages", "entry_points"]
 }

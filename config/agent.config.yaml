@@ -4,8 +4,27 @@ version: "0.1.0"
 pipeline:
   fail_open: false        # if a stage errors, do not silently skip it
   max_findings_per_stage: 200
+  max_candidate_findings_per_review: 500   # circuit breaker against pathological scanner noise
 
 verification:
   require_independent_verification: true
+  min_confidence_to_confirm: MEDIUM        # a LOW-confidence candidate cannot become CONFIRMED
 
-# TODO: model/tool budget settings, per-stage timeouts, etc.
+agents:
+  architecture-mapper:
+    model: sonnet
+    permissionMode: plan
+  security-reviewer:
+    model: sonnet
+    permissionMode: plan
+  security-verifier:
+    model: sonnet
+    permissionMode: plan
+
+# Read-only enforcement is layered, not prompt-only -- see .claude/rules/security.md
+# "Defensive Execution Policy" and hooks/hooks.json.
+enforcement:
+  deny_tools: [Edit, Write, NotebookEdit]
+  deny_bash_patterns_reference: "hooks/hooks.json"
+
+# TODO: per-stage timeouts, retry policy.

@@ -2,7 +2,52 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://security-review-agent/schemas/remediation.schema.json",
   "title": "Remediation",
+  "description": "Actionable, text-only remediation guidance for a CONFIRMED finding. Produced in 10_remediation_analysis. Never applied automatically -- see .claude/rules/security.md 'Absolute Read-Only Policy'.",
   "type": "object",
-  "properties": {},
-  "required": []
+  "properties": {
+    "summary": {
+      "type": "string",
+      "description": "One or two sentences: what to do."
+    },
+    "explanation": {
+      "type": "string",
+      "description": "What is vulnerable, why, and how an attacker could exploit it -- framed for remediation, not re-stating the finding's exploitation_scenario verbatim."
+    },
+    "fix_guidance": {
+      "type": "string",
+      "description": "Specific, framework-aware guidance on how to fix it."
+    },
+    "example_code": {
+      "type": "array",
+      "description": "Optional illustrative snippets. Informational only.",
+      "items": {
+        "type": "object",
+        "properties": {
+          "label": { "type": "string", "description": "e.g. 'before (vulnerable)', 'after (fixed)'" },
+          "language": { "type": "string" },
+          "code": { "type": "string" }
+        },
+        "required": ["label", "code"]
+      }
+    },
+    "configuration_recommendations": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "effort": {
+      "type": "string",
+      "enum": ["trivial", "small", "medium", "large"],
+      "description": "See knowledge/standards/remediation-effort-matrix.yaml."
+    },
+    "verification_steps": {
+      "type": "array",
+      "description": "How the team can confirm the fix actually closes the gap (e.g. a specific test case, a manual repro step, a scanner re-run).",
+      "items": { "type": "string" }
+    },
+    "references": {
+      "type": "array",
+      "items": { "type": "string", "format": "uri" }
+    }
+  },
+  "required": ["summary", "fix_guidance", "effort", "verification_steps"]
 }

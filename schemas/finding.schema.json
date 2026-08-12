@@ -2,7 +2,197 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://security-review-agent/schemas/finding.schema.json",
   "title": "Finding",
+  "description": "A single security finding as it moves through DETECTED -> CANDIDATE -> TRIAGED -> VERIFIED -> CONFIRMED (or REJECTED / NEEDS_MORE_EVIDENCE). See CLAUDE.md 'Finding Lifecycle' and agents/security-verifier.md.",
   "type": "object",
-  "properties": {},
-  "required": []
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "Stable identifier. Temporary during review (e.g. a UUID or scanner-provided id); assigned final SEC-NNN form at 11_final_report.",
+      "pattern": "^(SEC-[0-9]{3,}|[A-Za-z0-9._-]+)$"
+    },
+    "status": {
+      "type": "string",
+      "enum": ["CANDIDATE", "TRIAGED", "CONFIRMED", "REJECTED", "NEEDS_MORE_EVIDENCE"],
+      "description": "Lifecycle state. Only CONFIRMED findings appear as confirmed vulnerabilities in the final report."
+    },
+    "title": {
+      "type": "string",
+      "description": "Short, specific description of the vulnerability (not a CWE name alone)."
+    },
+    "category": {
+      "type": "string",
+      "description": "Vulnerability category, e.g. 'SQL Injection', 'Broken Object Level Authorization', 'Hardcoded Secret'."
+    },
+    "cwe": {
+      "type": "string",
+      "pattern": "^CWE-[0-9]+$",
+      "description": "CWE identifier. See knowledge/cwe/cwe-mapping.json."
+    },
+    "owasp_category": {
+      "type": "string",
+      "description": "OWASP Top 10 / API Top 10 category, when applicable. See knowledge/owasp/."
+    },
+    "severity": {
+      "type": "string",
+      "enum": ["critical", "high", "medium", "low", "informational"],
+      "description": "Technical and business impact. Distinct from priority -- see config/severity.config.yaml."
+    },
+    "priority": {
+      "type": "string",
+      "enum": ["P0", "P1", "P2", "P3", "P4"],
+      "description": "Remediation urgency, assigned in 09_prioritization. See config/priority.config.yaml."
+    },
+    "priority_factors": {
+      "type": "object",
+      "description": "Auditable breakdown of what drove the priority assignment.",
+      "properties": {
+        "exploitability": { "type": "string" },
+        "exposure": { "type": "string" },
+        "authentication_required": { "type": "boolean" },
+        "privileges_required": { "type": "string" },
+        "blast_radius": { "type": "string" },
+        "remediation_effort": { "type": "string", "enum": ["trivial", "small", "medium", "large"] },
+        "kev_override_applied": { "type": "boolean" }
+      }
+    },
+    "confidence": {
+      "type": "string",
+      "enum": ["HIGH", "MEDIUM", "LOW"],
+      "description": "How much of the source-to-sink path and security controls were actually confirmed."
+    },
+    "location": {
+      "type": "object",
+      "description": "Primary affected location. Use 'locations' instead when deduplication merges multiple call sites of the same root cause.",
+      "properties": {
+        "file": { "type": "string" },
+        "line_start": { "type": "integer", "minimum": 1 },
+        "line_end": { "type": "integer", "minimum": 1 }
+      },
+      "required": ["file"]
+    },
+    "locations": {
+      "type": "array",
+      "description": "Used when deduplicate_findings.py merges multiple occurrences of the same root cause.",
+      "items": { "$ref": "#/properties/location" }
+    },
+    "source": {
+      "type": "string",
+      "description": "Where attacker-influenced data originates (e.g. 'HTTP query parameter `id`')."
+    },
+    "sink": {
+      "type": "string",
+      "description": "The dangerous operation the data reaches (e.g. 'raw SQL query execution')."
+    },
+    "data_flow": {
+      "type": "array",
+      "description": "Traced path per the SOURCE -> ... -> SINK model in CLAUDE.md.",
+      "items": {
+        "type": "object",
+        "properties": {
+          "stage": {
+            "type": "string",
+            "enum": ["SOURCE", "PARSING", "TRANSFORMATION", "VALIDATION", "AUTHENTICATION", "AUTHORIZATION", "BUSINESS_LOGIC", "SINK"]
+          },
+          "description": { "type": "string" },
+          "file": { "type": "string" },
+          "line": { "type": "integer" },
+          "confirmed": { "type": "boolean", "description": "Whether this step was actually verified in code vs. assumed." }
+        },
+        "required": ["stage", "description"]
+      }
+    },
+    "evidence": {
+      "type": "array",
+      "description": "Actual code excerpts and/or scanner output supporting the finding -- not paraphrases.",
+      "items": {
+        "type": "object",
+        "properties": {
+          "file": { "type": "string" },
+          "line": { "type": "integer" },
+          "snippet": { "type": "string" },
+          "source": { "type": "string", "description": "e.g. 'semgrep', 'manual-review', 'gitleaks'" }
+        },
+        "required": ["snippet"]
+      }
+    },
+    "attack_vector": {
+      "type": "string",
+      "description": "How an attacker delivers the exploit (e.g. 'crafted HTTP POST to /api/orders/{id}')."
+    },
+    "exploitation_scenario": {
+      "type": "string",
+      "description": "Concrete, narrative walkthrough of an actual exploitation, not a generic description of the vulnerability class."
+    },
+    "attacker_prerequisites": {
+      "type": "object",
+      "properties": {
+        "authentication_required": { "type": "boolean" },
+        "privileges_required": { "type": "string", "enum": ["none", "user", "privileged", "admin", "internal-service"] },
+        "network_position": { "type": "string", "enum": ["internet", "internal-network", "local"] },
+        "user_interaction_required": { "type": "boolean" }
+      }
+    },
+    "technical_impact": {
+      "type": "string",
+      "description": "Confidentiality / integrity / availability consequences."
+    },
+    "business_impact": {
+      "type": "string",
+      "description": "Consequences in business terms: data exposure, compliance, financial, reputational."
+    },
+    "consequences_if_unresolved": {
+      "type": "string"
+    },
+    "kev": {
+      "type": "object",
+      "description": "CISA KEV correlation for dependency findings. See scripts/scanners/check_kev.py.",
+      "properties": {
+        "listed": { "type": ["boolean", "null"] },
+        "lookup_status": { "type": "string", "enum": ["live", "cache", "stale-cache", "unavailable"] },
+        "vendor_project": { "type": "string" },
+        "product": { "type": "string" },
+        "vulnerability_name": { "type": "string" },
+        "date_added": { "type": "string", "format": "date" },
+        "due_date": { "type": "string", "format": "date" },
+        "known_ransomware_campaign_use": { "type": "string" },
+        "required_action": { "type": "string" }
+      }
+    },
+    "verification": {
+      "type": "object",
+      "description": "Populated by security-verifier during 08_verification.",
+      "properties": {
+        "attacker_control_confirmed": { "type": "boolean" },
+        "reachability_confirmed": { "type": "boolean" },
+        "existing_security_controls": { "type": "array", "items": { "type": "string" } },
+        "framework_protections_checked": { "type": "array", "items": { "type": "string" } },
+        "compensating_controls": { "type": "array", "items": { "type": "string" } },
+        "exploitability_conclusion": { "type": "string" },
+        "verification_evidence": { "type": "array", "items": { "type": "string" } },
+        "rejection_reason": { "type": "string" }
+      }
+    },
+    "false_positive_analysis": {
+      "type": "object",
+      "description": "Required whenever status is REJECTED, and useful documentation even when CONFIRMED (why the obvious FP explanations don't apply here).",
+      "properties": {
+        "conditions_checked": { "type": "array", "items": { "type": "string" } },
+        "conclusion": { "type": "string" }
+      }
+    },
+    "remediation": {
+      "$ref": "remediation.schema.json"
+    }
+  },
+  "required": ["id", "status", "title", "category", "severity", "confidence", "location"],
+  "allOf": [
+    {
+      "if": { "properties": { "status": { "const": "REJECTED" } } },
+      "then": { "required": ["false_positive_analysis"] }
+    },
+    {
+      "if": { "properties": { "status": { "const": "CONFIRMED" } } },
+      "then": { "required": ["priority", "remediation", "exploitation_scenario"] }
+    }
+  ]
 }

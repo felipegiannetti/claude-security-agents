@@ -1,7 +1,58 @@
-# Severity classification thresholds. See knowledge/standards/severity-matrix.yaml
-# for the underlying criteria.
+# Severity classification. Severity is technical/business impact -- distinct
+# from priority (remediation urgency, see priority.config.yaml).
+# See knowledge/standards/severity-matrix.yaml for the narrative criteria this
+# encodes, and CLAUDE.md "Severity and Priority".
 version: "0.1.0"
 
 levels: [critical, high, medium, low, informational]
 
-# TODO: map CWE/CVSS ranges and finding categories to levels above.
+# Base severity by category. This is a starting point for 07_triage, not a
+# final answer -- security-verifier may adjust it in 08_verification once the
+# actual attack scenario is confirmed (see agents/security-verifier.md
+# "Severity Review").
+category_base_severity:
+  sql-injection: critical
+  command-injection: critical
+  code-injection: critical
+  remote-code-execution: critical
+  authentication-bypass: critical
+  hardcoded-credential-live: critical
+  ssrf: high
+  broken-object-level-authorization: high
+  broken-function-level-authorization: high
+  insecure-deserialization: high
+  path-traversal: high
+  xxe: high
+  nosql-injection: high
+  ldap-injection: high
+  stored-xss: high
+  reflected-xss: medium
+  dom-xss: medium
+  csrf: medium
+  open-redirect: low
+  clickjacking: low
+  missing-security-headers: low
+  weak-cryptography: medium
+  insecure-random: medium
+  mass-assignment: medium
+  excessive-data-exposure: medium
+  rate-limiting-missing: medium
+  hardcoded-credential-placeholder: informational
+  iac-misconfiguration: medium
+  vulnerable-dependency: medium # further adjusted by CVSS + KEV in scan correlation
+
+# Impact modifiers applied on top of the category base. A modifier can only
+# raise severity, never silently lower it below the category base -- lowering
+# requires an explicit verifier judgment recorded in the finding's
+# verification field, not a config rule.
+impact_floors:
+  technical_impact_includes_rce: critical
+  technical_impact_includes_full_auth_bypass: critical
+  affects_data_category:
+    payment-data: high
+    credentials: high
+    pii: high
+    health-data: high
+
+# TODO: precise CVSS score range -> severity mapping for dependency findings,
+# once scripts/scanners/run_osv_scanner.py output shape is finalized.

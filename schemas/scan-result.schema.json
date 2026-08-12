@@ -2,7 +2,41 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://security-review-agent/schemas/scan-result.schema.json",
   "title": "Scan Result",
+  "description": "Normalized output of any deterministic scanner (stage 04_static_scan), before correlation into a candidate finding. This is evidence, not a conclusion -- see .claude/rules/security.md 'Scanner Trust Policy'.",
   "type": "object",
-  "properties": {},
-  "required": []
+  "properties": {
+    "tool": {
+      "type": "string",
+      "enum": ["semgrep", "gitleaks", "trivy", "osv-scanner", "cisa-kev"]
+    },
+    "rule_id": { "type": "string" },
+    "title": { "type": "string" },
+    "raw_severity": {
+      "type": "string",
+      "description": "The tool's own severity label, kept separate from this project's severity/priority -- never used directly without correlation."
+    },
+    "file": { "type": "string" },
+    "line_start": { "type": "integer" },
+    "line_end": { "type": "integer" },
+    "snippet": { "type": "string" },
+    "cve": { "type": "string", "pattern": "^CVE-[0-9]{4}-[0-9]+$" },
+    "cwe": { "type": "string", "pattern": "^CWE-[0-9]+$" },
+    "package": { "type": "string" },
+    "installed_version": { "type": "string" },
+    "affected_range": { "type": "string" },
+    "kev": { "$ref": "finding.schema.json#/properties/kev" },
+    "correlated": {
+      "type": "boolean",
+      "description": "Set true once security-reviewer has correlated this result with code/architecture context in 05_llm_review."
+    },
+    "promoted_finding_id": {
+      "type": "string",
+      "description": "Set if this scan result was promoted to a candidate finding; absent if discarded as noise."
+    },
+    "raw_output": {
+      "type": "object",
+      "description": "Original tool output, preserved for traceability."
+    }
+  },
+  "required": ["tool", "file"]
 }

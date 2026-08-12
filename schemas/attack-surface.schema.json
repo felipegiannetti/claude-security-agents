@@ -1,8 +1,32 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://security-review-agent/schemas/attack-surface.schema.json",
-  "title": "Attack Surface",
+  "title": "Attack Surface Map",
+  "description": "Output of 03_attack_surface_mapping. Every untrusted-input entry point, ranked by risk.",
   "type": "object",
-  "properties": {},
-  "required": []
+  "properties": {
+    "entry_points": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string" },
+          "type": { "type": "string", "enum": ["rest", "graphql", "websocket", "webhook", "file-upload", "cli", "queue-consumer", "admin-interface", "third-party-callback"] },
+          "path_or_command": { "type": "string" },
+          "file": { "type": "string" },
+          "trust_level": { "type": "string", "enum": ["unauthenticated", "authenticated", "privileged-only"] },
+          "data_sensitivity": { "type": "string", "enum": ["none", "low", "medium", "high"] },
+          "touches_sensitive_operation": {
+            "type": "array",
+            "items": { "type": "string", "enum": ["authentication", "authorization", "password-reset", "payments", "admin-action", "file-handling", "data-export"] }
+          },
+          "risk_rank": { "type": "string", "enum": ["high", "medium", "low"] },
+          "in_scope": { "type": "boolean" },
+          "exclusion_reason": { "type": "string" }
+        },
+        "required": ["id", "type", "file", "trust_level", "risk_rank", "in_scope"]
+      }
+    }
+  },
+  "required": ["entry_points"]
 }

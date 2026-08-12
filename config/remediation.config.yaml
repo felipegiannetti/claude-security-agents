@@ -1,6 +1,48 @@
-# Remediation guidance configuration. See knowledge/standards/remediation-effort-matrix.yaml.
+# Remediation guidance configuration for 10_remediation_analysis.
+# See knowledge/standards/remediation-effort-matrix.yaml for the narrative
+# criteria this encodes.
 version: "0.1.0"
 
 effort_levels: [trivial, small, medium, large]
 
-# TODO: language/framework-specific remediation defaults.
+# Default effort estimate by category, used as a starting point in
+# prompts/remediation_prompt.md. The actual finding may override this when
+# the fix is unusually simple/complex in context (e.g. a single call site vs.
+# a pattern repeated across 40 files after deduplication).
+category_default_effort:
+  sql-injection: trivial              # parameterize the query / use ORM binding
+  hardcoded-credential-live: trivial  # rotate + move to secret manager
+  missing-security-headers: trivial
+  open-redirect: trivial
+  weak-cryptography: small            # swap algorithm/library call
+  insecure-random: small
+  reflected-xss: small
+  dom-xss: small
+  csrf: small                         # enable framework CSRF middleware
+  path-traversal: small
+  broken-object-level-authorization: medium   # add ownership/tenant check
+  broken-function-level-authorization: medium
+  mass-assignment: medium
+  excessive-data-exposure: medium
+  ssrf: medium                        # allowlist + network egress control
+  stored-xss: medium
+  nosql-injection: medium
+  ldap-injection: medium
+  insecure-deserialization: medium
+  vulnerable-dependency: medium        # version bump, verify no breaking change
+  iac-misconfiguration: medium
+  authentication-bypass: large        # often needs a design-level fix
+  remote-code-execution: large
+  rate-limiting-missing: large        # infra/gateway-level change in most stacks
+
+# Framework-aware guidance hints consumed by prompts/remediation_prompt.md so
+# recommendations aren't generic. Extend as knowledge/frameworks/ grows.
+framework_hints:
+  sql-injection:
+    - "Use parameterized queries / prepared statements, or the ORM's safe query builder -- never string-format user input into SQL."
+  csrf:
+    - "Prefer the framework's built-in CSRF middleware/token mechanism over a custom implementation."
+  stored-xss:
+    - "Rely on the framework/template engine's default auto-escaping; treat any explicit 'raw HTML' / dangerouslySetInnerHTML-style API as a review flag."
+  weak-cryptography:
+    - "Use the platform's current recommended primitives (e.g. AES-GCM, Argon2id/bcrypt for passwords) rather than hand-rolled or deprecated algorithms (MD5, SHA1, DES, ECB mode)."
