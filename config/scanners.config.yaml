@@ -14,4 +14,14 @@ trivy:
 osv_scanner:
   enabled: true
 
+# Cross-references CVEs found by osv_scanner against the CISA Known Exploited
+# Vulnerabilities catalog. See scripts/scanners/check_kev.py and
+# skills/dependency-cve-check/references/kev-correlation.md.
+cisa_kev:
+  enabled: true
+  feed_url: "https://www.cisa.gov/sites/default/files/feeds/known_exploited_vulnerabilities.json"
+  cache_path: "outputs/.cache/cisa_kev.json"
+  cache_ttl_hours: 24
+  offline: false  # if true, never hit the network; use cache_path only
+
 # TODO: per-scanner rule sets, severity thresholds, timeouts.

@@ -1,18 +1,24 @@
 {
+  "$schema": "https://json.schemastore.org/claude-code-plugin-manifest.json",
+
   "name": "security-review-agent",
+
+  "displayName": "Security Review Agent",
+
   "version": "0.1.0",
-  "description": "Multi-stage AI security code review agent: architecture discovery, attack surface mapping, static scanning, LLM-driven review, verification, prioritization, and remediation guidance.",
-  "author": {
-    "name": ""
-  },
+
+  "description": "Read-only AI-assisted application security review plugin for Claude Code. Analyzes source code, architecture, dependencies, configuration and security controls to identify, verify, prioritize and document security vulnerabilities without modifying the analyzed project.",
+
   "keywords": [
     "security",
+    "cybersecurity",
+    "appsec",
     "code-review",
+    "security-review",
     "sast",
     "owasp",
-    "vulnerability-scanning"
-  ],
-  "agents": "./agents",
-  "skills": "./skills",
-  "hooks": "./hooks/hooks.json"
+    "cwe",
+    "vulnerability-analysis",
+    "read-only"
+  ]
 }

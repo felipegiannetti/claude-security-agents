@@ -15,3 +15,14 @@ levels:
     label: Informational
 
 # TODO: weighting of severity, exploitability, exposure, confidence, effort.
+
+# CISA KEV is an exploitability signal, not a severity signal: a KEV-listed
+# CVE is confirmed to be actively exploited in the wild, regardless of its
+# CVSS score. It overrides the CVSS-derived priority with a floor, it never
+# lowers a priority that was already higher for other reasons.
+# See scripts/scanners/check_kev.py and
+# skills/dependency-cve-check/references/kev-correlation.md.
+kev_overrides:
+  enabled: true
+  listed_priority_floor: P1
+  known_ransomware_campaign_use_priority_floor: P0
