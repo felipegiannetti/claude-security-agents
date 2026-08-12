@@ -1,0 +1,17 @@
+# Remediation priority configuration. See knowledge/standards/priority-matrix.yaml
+# for the underlying criteria and CLAUDE.md "Severity and Priority".
+version: "0.1.0"
+
+levels:
+  - id: P0
+    label: Immediate
+  - id: P1
+    label: High
+  - id: P2
+    label: Medium
+  - id: P3
+    label: Low
+  - id: P4
+    label: Informational
+
+# TODO: weighting of severity, exploitability, exposure, confidence, effort.

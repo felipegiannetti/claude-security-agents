@@ -1,0 +1,13 @@
+# Paths and patterns excluded from all review stages (generated code, vendored
+# dependencies, test fixtures, etc.).
+version: "0.1.0"
+
+paths:
+  - "**/node_modules/**"
+  - "**/vendor/**"
+  - "**/dist/**"
+  - "**/build/**"
+  - "**/.git/**"
+  - "tests/fixtures/**"
+
+# TODO: rule-id-specific suppressions, per-language exclusions.

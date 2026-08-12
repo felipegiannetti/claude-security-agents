@@ -1,0 +1,5 @@
+# Patterns/fixtures ("safe" examples) that must NOT produce a confirmed
+# finding. Used to measure false-positive rate.
+version: "0.1.0"
+
+false_positives: {}

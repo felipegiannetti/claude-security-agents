@@ -1,0 +1,17 @@
+# Deterministic scanner configuration (invoked from scripts/scanners/).
+version: "0.1.0"
+
+semgrep:
+  enabled: true
+  config: auto
+
+gitleaks:
+  enabled: true
+
+trivy:
+  enabled: true
+
+osv_scanner:
+  enabled: true
+
+# TODO: per-scanner rule sets, severity thresholds, timeouts.

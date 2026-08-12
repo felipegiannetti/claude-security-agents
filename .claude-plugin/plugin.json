@@ -1,0 +1,18 @@
+{
+  "name": "security-review-agent",
+  "version": "0.1.0",
+  "description": "Multi-stage AI security code review agent: architecture discovery, attack surface mapping, static scanning, LLM-driven review, verification, prioritization, and remediation guidance.",
+  "author": {
+    "name": ""
+  },
+  "keywords": [
+    "security",
+    "code-review",
+    "sast",
+    "owasp",
+    "vulnerability-scanning"
+  ],
+  "agents": "./agents",
+  "skills": "./skills",
+  "hooks": "./hooks/hooks.json"
+}

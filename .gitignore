@@ -1,0 +1,28 @@
+# Generated output / runtime logs (keep the directories, ignore contents)
+outputs/*
+!outputs/.gitkeep
+logs/*
+!logs/.gitkeep
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# Node
+node_modules/
+
+# Editor / OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Secrets / local env
+.env
+.env.*
+!.env.example
+
+# Local Claude settings overrides
+.claude/settings.local.json

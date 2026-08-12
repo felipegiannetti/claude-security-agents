@@ -1,0 +1,19 @@
+# Maps detected languages/frameworks/file patterns to the skills that should
+# be invoked during the llm_review stage. Consumed by the security-reviewer agent.
+version: "0.1.0"
+
+# TODO: define rules, e.g.:
+# rules:
+#   - when:
+#       path_glob: "**/*.sql"
+#     use_skills: [injection-review]
+#   - when:
+#       framework: express
+#     use_skills: [web-security-review, api-security-review]
+
+rules: []
+
+# Skills always run regardless of routing match.
+always_run:
+  - secure-code-review
+  - secrets-detection

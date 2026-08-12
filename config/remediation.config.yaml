@@ -1,0 +1,6 @@
+# Remediation guidance configuration. See knowledge/standards/remediation-effort-matrix.yaml.
+version: "0.1.0"
+
+effort_levels: [trivial, small, medium, large]
+
+# TODO: language/framework-specific remediation defaults.

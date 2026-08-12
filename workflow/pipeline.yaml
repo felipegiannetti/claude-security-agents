@@ -1,0 +1,33 @@
+# Security review pipeline: ordered stages executed for a full review.
+# Each stage corresponds to a doc in workflow/stages/.
+name: security-review-pipeline
+version: "0.1.0"
+
+stages:
+  - id: intake
+    doc: stages/01_intake.md
+  - id: architecture_discovery
+    doc: stages/02_architecture_discovery.md
+    agent: architecture-mapper
+  - id: attack_surface_mapping
+    doc: stages/03_attack_surface_mapping.md
+  - id: static_scan
+    doc: stages/04_static_scan.md
+  - id: llm_review
+    doc: stages/05_llm_review.md
+    agent: security-reviewer
+  - id: data_flow_analysis
+    doc: stages/06_data_flow_analysis.md
+  - id: triage
+    doc: stages/07_triage.md
+  - id: verification
+    doc: stages/08_verification.md
+    agent: security-verifier
+  - id: prioritization
+    doc: stages/09_prioritization.md
+  - id: remediation_analysis
+    doc: stages/10_remediation_analysis.md
+  - id: final_report
+    doc: stages/11_final_report.md
+
+# TODO: define per-stage inputs/outputs and failure handling.

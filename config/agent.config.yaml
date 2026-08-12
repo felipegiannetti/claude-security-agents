@@ -1,0 +1,11 @@
+# Top-level agent/pipeline behavior configuration.
+version: "0.1.0"
+
+pipeline:
+  fail_open: false        # if a stage errors, do not silently skip it
+  max_findings_per_stage: 200
+
+verification:
+  require_independent_verification: true
+
+# TODO: model/tool budget settings, per-stage timeouts, etc.

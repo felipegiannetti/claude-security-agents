@@ -1,0 +1,11 @@
+# Enumerates test cases: which fixture maps to which expected outcome.
+# Consumed by test_runner.py.
+version: "0.1.0"
+
+cases: []
+
+# TODO: e.g.
+# cases:
+#   - id: sql-injection-001
+#     path: fixtures/sql-injection/vulnerable/example.py
+#     expect: expected_findings.yaml#sql-injection-001

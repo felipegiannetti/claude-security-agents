@@ -1,0 +1,5 @@
+# Ground-truth findings expected from the "vulnerable" fixtures.
+# Keyed by eval case id (see eval_cases.yaml).
+version: "0.1.0"
+
+findings: {}

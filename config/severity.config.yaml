@@ -1,0 +1,7 @@
+# Severity classification thresholds. See knowledge/standards/severity-matrix.yaml
+# for the underlying criteria.
+version: "0.1.0"
+
+levels: [critical, high, medium, low, informational]
+
+# TODO: map CWE/CVSS ranges and finding categories to levels above.
