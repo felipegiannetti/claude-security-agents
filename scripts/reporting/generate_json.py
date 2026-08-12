@@ -27,7 +27,7 @@ from calculate_security_posture import compute as compute_posture  # noqa: E402
 def load(path: str | None) -> dict:
     if not path:
         return {}
-    return common.json.loads(Path(path).read_text(encoding="utf-8"))
+    return common.json.loads(Path(path).read_text(encoding="utf-8-sig"))
 
 
 def main() -> int:
@@ -42,7 +42,7 @@ def main() -> int:
 
     metadata = load(args.metadata)
     executive_summary = load(args.executive_summary)
-    findings = common.json.loads(Path(args.findings).read_text(encoding="utf-8"))
+    findings = common.json.loads(Path(args.findings).read_text(encoding="utf-8-sig"))
     architecture = load(args.architecture) if args.architecture else None
 
     posture = compute_posture(findings)

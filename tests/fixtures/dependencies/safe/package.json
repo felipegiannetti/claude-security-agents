@@ -1,0 +1,8 @@
+{
+  "name": "fixture-safe-dependencies",
+  "private": true,
+  "description": "Safe fixture (paired with vulnerable/package.json): lodash pinned to the fully patched version outside every currently known affected range. Expected: dependency-cve-check should NOT confirm a finding here -- see skills/dependency-cve-check/references/osv.md 'False-Positive Conditions'. Note: 4.17.21 alone is NOT sufficient as of this fixture's writing -- later lodash CVEs (prototype pollution, code injection via _.template) were fixed only in 4.18.0, which is exactly the kind of drift dependency-cve-check exists to catch on every run, not just once.",
+  "dependencies": {
+    "lodash": "4.18.0"
+  }
+}

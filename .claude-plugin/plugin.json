@@ -20,5 +20,7 @@
     "cwe",
     "vulnerability-analysis",
     "read-only"
-  ]
+  ],
+
+  "hooks": "./hooks/hooks.json"
 }

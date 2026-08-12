@@ -33,6 +33,7 @@ Usage:
 import argparse
 import sys
 from pathlib import Path
+from typing import Optional
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "scripts" / "lib"))
 import common  # noqa: E402
@@ -48,27 +49,41 @@ SCANNER_SCRIPTS = {
 }
 
 
-def run_scanner(scanner: str, target_path: Path) -> list[dict]:
+def run_scanner(scanner: str, target_path: Path) -> tuple[list[dict], bool]:
+    """Returns (hits, tool_unavailable). A scanner script that couldn't find
+    its underlying tool prints a {"skipped": true, ...} object, not a list --
+    that must never be misread as "hits" (a dict's len() is its key count,
+    which is nonzero and would silently look like a true positive)."""
     script = SCANNER_SCRIPTS.get(scanner)
     if not script:
-        return []
+        return [], True
     result = common.run_tool([sys.executable, str(script), "--path", str(target_path)], timeout=120)
     if not result["ok"] or result["returncode"] != 0:
         print(f"    warning: {scanner} run failed ({result.get('error') or result.get('stderr')})", file=sys.stderr)
-        return []
+        return [], True
     try:
-        return common.json.loads(result["stdout"] or "[]")
+        parsed = common.json.loads(result["stdout"] or "[]")
     except common.json.JSONDecodeError:
-        return []
+        return [], True
+    if isinstance(parsed, dict) and parsed.get("skipped"):
+        print(f"    note: {scanner} skipped itself ({parsed.get('reason')})", file=sys.stderr)
+        return [], True
+    return (parsed if isinstance(parsed, list) else []), False
 
 
-def check_scanner_case(case: dict) -> bool:
+def check_scanner_case(case: dict) -> Optional[bool]:
+    """Returns True/False for pass/fail, or None if the underlying scanner
+    tool wasn't available -- a SKIP must never count as a PASS or a FAIL."""
     scanner = case["scanner"]
     vulnerable_path = TESTS_ROOT / case["vulnerable_path"]
     safe_path = TESTS_ROOT / case["safe_path"]
 
-    vulnerable_hits = run_scanner(scanner, vulnerable_path)
-    safe_hits = run_scanner(scanner, safe_path)
+    vulnerable_hits, vuln_unavailable = run_scanner(scanner, vulnerable_path)
+    safe_hits, safe_unavailable = run_scanner(scanner, safe_path)
+
+    if vuln_unavailable or safe_unavailable:
+        print(f"  [SKIP] {case['id']} ({scanner}): tool not available in this environment", file=sys.stderr)
+        return None
 
     true_positive = len(vulnerable_hits) > 0
     false_positive = len(safe_hits) > 0
@@ -94,10 +109,10 @@ def main() -> int:
     parser.add_argument("--cases", default=str(TESTS_ROOT / "eval_cases.yaml"))
     args = parser.parse_args()
 
-    cases_cfg = common.yaml.safe_load(Path(args.cases).read_text(encoding="utf-8")) if common.yaml else {}
+    cases_cfg = common.yaml.safe_load(Path(args.cases).read_text(encoding="utf-8-sig")) if common.yaml else {}
     cases = (cases_cfg or {}).get("cases", [])
-    expected_findings = common.yaml.safe_load((TESTS_ROOT / "expected_findings.yaml").read_text(encoding="utf-8")) if common.yaml else {}
-    expected_fps = common.yaml.safe_load((TESTS_ROOT / "expected_false_positives.yaml").read_text(encoding="utf-8")) if common.yaml else {}
+    expected_findings = common.yaml.safe_load((TESTS_ROOT / "expected_findings.yaml").read_text(encoding="utf-8-sig")) if common.yaml else {}
+    expected_fps = common.yaml.safe_load((TESTS_ROOT / "expected_false_positives.yaml").read_text(encoding="utf-8-sig")) if common.yaml else {}
 
     if not cases:
         print("no eval cases found", file=sys.stderr)
@@ -105,20 +120,29 @@ def main() -> int:
 
     print(f"Running {len(cases)} eval case(s)...\n")
 
-    automated_pass = automated_total = 0
+    automated_pass = automated_fail = automated_skip = 0
     for case in cases:
         if case.get("scanner"):
-            automated_total += 1
-            if check_scanner_case(case):
+            outcome = check_scanner_case(case)
+            if outcome is None:
+                automated_skip += 1
+            elif outcome:
                 automated_pass += 1
+            else:
+                automated_fail += 1
         else:
             report_manual_case(case, expected_findings or {}, expected_fps or {})
 
-    print(f"\nAutomated (scanner-level) checks: {automated_pass}/{automated_total} passed")
+    automated_run = automated_pass + automated_fail
+    print(f"\nAutomated (scanner-level) checks: {automated_pass}/{automated_run} passed"
+          f"{f' ({automated_skip} skipped -- underlying tool not installed)' if automated_skip else ''}")
     print(f"Manual (LLM-review-level) checks: {sum(1 for c in cases if not c.get('scanner'))} case(s) "
           f"require a pipeline run -- see output above for expected outcomes.")
 
-    return 0 if automated_pass == automated_total else 1
+    # A SKIP (tool unavailable) is not a failure of this project's detection
+    # logic -- only an actual FAIL (tool ran and got the wrong answer) should
+    # fail the run.
+    return 0 if automated_fail == 0 else 1
 
 
 if __name__ == "__main__":

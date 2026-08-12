@@ -31,3 +31,52 @@ findings:
     min_severity: high
     location_file: fixtures/idor/vulnerable/app.py
     location_function: get_invoice
+
+  authentication-001:
+    category: insecure-jwt-verification
+    cwe: CWE-347
+    min_severity: critical
+    location_file: fixtures/authentication/vulnerable/app.py
+    location_function: decode_token
+
+  authorization-001:
+    category: broken-function-level-authorization
+    cwe: CWE-862
+    min_severity: critical
+    location_file: fixtures/authorization/vulnerable/app.py
+    location_function: delete_user
+
+  command-injection-001:
+    category: command-injection
+    cwe: CWE-78
+    min_severity: critical
+    location_file: fixtures/command-injection/vulnerable/app.py
+    location_function: ping_host
+
+  dependencies-001:
+    category: vulnerable-dependency
+    cwe: CWE-1104
+    min_severity: medium
+    location_file: fixtures/dependencies/vulnerable/package.json
+    location_function: null
+
+  file-upload-001:
+    category: unrestricted-file-upload
+    cwe: CWE-434
+    min_severity: critical
+    location_file: fixtures/file-upload/vulnerable/app.py
+    location_function: upload_avatar
+
+  ssrf-001:
+    category: ssrf
+    cwe: CWE-918
+    min_severity: high
+    location_file: fixtures/ssrf/vulnerable/app.py
+    location_function: fetch_preview
+
+  business-logic-001:
+    category: race-condition
+    cwe: CWE-362
+    min_severity: high
+    location_file: fixtures/business-logic/vulnerable/app.py
+    location_function: redeem_coupon

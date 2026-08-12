@@ -70,5 +70,28 @@
     ]
   },
 
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Edit|Write|NotebookEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python hooks/deny_write_tools.py"
+          }
+        ]
+      },
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python hooks/deny_mutating_bash.py"
+          }
+        ]
+      }
+    ]
+  },
+
   "disableBypassPermissionsMode": "disable"
 }

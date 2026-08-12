@@ -20,7 +20,7 @@ reason. Exit code 0 allows. Any error parsing stdin fails closed (blocks).
 Wire this up from settings.json, e.g.:
     "PreToolUse": [
       {"matcher": "Bash",
-       "hooks": [{"type": "command", "command": "python3 hooks/deny_mutating_bash.py"}]}
+       "hooks": [{"type": "command", "command": "python hooks/deny_mutating_bash.py"}]}
     ]
 """
 

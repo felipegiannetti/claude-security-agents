@@ -57,7 +57,7 @@ def load_cache(cache_path: Path) -> Optional[dict]:
     if not cache_path.exists():
         return None
     try:
-        return json.loads(cache_path.read_text(encoding="utf-8"))
+        return json.loads(cache_path.read_text(encoding="utf-8-sig"))
     except (OSError, json.JSONDecodeError):
         return None
 
@@ -150,7 +150,7 @@ def enrich_findings(findings: list[dict], index: Optional[dict[str, dict]], look
 def read_findings(input_path: Optional[str], raw_cves: Optional[list[str]]) -> list[dict]:
     if raw_cves:
         return [{"cve": cve} for cve in raw_cves]
-    text = Path(input_path).read_text(encoding="utf-8") if input_path else sys.stdin.read()
+    text = Path(input_path).read_text(encoding="utf-8-sig") if input_path else sys.stdin.read()
     data = json.loads(text) if text.strip() else []
     if isinstance(data, dict) and "findings" in data:
         data = data["findings"]

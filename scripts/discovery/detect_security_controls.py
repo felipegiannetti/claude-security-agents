@@ -50,7 +50,7 @@ PYTHON_CONTROL_SIGNATURES = {
 def detect_from_package_json(path: Path) -> list[str]:
     controls = []
     try:
-        data = json.loads(path.read_text(encoding="utf-8"))
+        data = json.loads(path.read_text(encoding="utf-8-sig"))
     except (json.JSONDecodeError, OSError):
         return controls
     deps = {**data.get("dependencies", {}), **data.get("devDependencies", {})}
@@ -63,7 +63,7 @@ def detect_from_package_json(path: Path) -> list[str]:
 def detect_from_requirements(path: Path) -> list[str]:
     controls = []
     try:
-        text = path.read_text(encoding="utf-8").lower()
+        text = path.read_text(encoding="utf-8-sig").lower()
     except OSError:
         return controls
     for pattern, description in PYTHON_CONTROL_SIGNATURES.items():

@@ -25,3 +25,38 @@ false_positives:
     category: broken-object-level-authorization
     location_file: fixtures/idor/safe/app.py
     why_safe: "lookup scoped to the authenticated caller via find_invoice_for_owner -- see skills/api-security-review/references/bola-idor.md"
+
+  authentication-001:
+    category: insecure-jwt-verification
+    location_file: fixtures/authentication/safe/app.py
+    why_safe: "algorithms=[\"RS256\"] pins the expected algorithm server-side -- see skills/auth-authz-review/references/jwt.md"
+
+  authorization-001:
+    category: broken-function-level-authorization
+    location_file: fixtures/authorization/safe/app.py
+    why_safe: "require_admin() explicitly checks session[\"role\"] before the privileged action -- see skills/api-security-review/references/broken-function-authorization.md"
+
+  command-injection-001:
+    category: command-injection
+    location_file: fixtures/command-injection/safe/app.py
+    why_safe: "argument-array execution with shell=False -- shell metacharacters in hostname are inert -- see skills/injection-review/references/command-injection.md"
+
+  dependencies-001:
+    category: vulnerable-dependency
+    location_file: fixtures/dependencies/safe/package.json
+    why_safe: "lodash pinned to 4.17.21, outside the affected range -- see skills/dependency-cve-check/references/osv.md"
+
+  file-upload-001:
+    category: unrestricted-file-upload
+    location_file: fixtures/file-upload/safe/app.py
+    why_safe: "content-based type check (imghdr) plus server-generated filename and non-servable storage path -- see skills/file-security-review/references/file-upload.md"
+
+  ssrf-001:
+    category: ssrf
+    location_file: fixtures/ssrf/safe/app.py
+    why_safe: "destination allowlist validated against the resolved IP, no redirect-following -- see skills/web-security-review/references/ssrf.md"
+
+  business-logic-001:
+    category: race-condition
+    location_file: fixtures/business-logic/safe/app.py
+    why_safe: "mark_coupon_used_if_unused performs check-and-act as a single atomic operation -- see skills/business-logic-review/references/race-conditions.md"

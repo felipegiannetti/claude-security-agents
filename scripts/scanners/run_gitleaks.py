@@ -70,7 +70,7 @@ def main() -> int:
 
     # gitleaks exits non-zero when leaks are found -- that's expected, not a failure.
     try:
-        report_text = Path(report_path).read_text(encoding="utf-8") if Path(report_path).exists() else "[]"
+        report_text = Path(report_path).read_text(encoding="utf-8-sig") if Path(report_path).exists() else "[]"
         raw = common.json.loads(report_text or "[]")
     except common.json.JSONDecodeError as exc:
         print(f"warning: could not parse gitleaks output ({exc})", file=sys.stderr)

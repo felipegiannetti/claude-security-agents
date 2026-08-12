@@ -1,19 +1,234 @@
-# Maps detected languages/frameworks/file patterns to the skills that should
-# be invoked during the llm_review stage. Consumed by the security-reviewer agent.
-version: "0.1.0"
+# Maps detected languages/frameworks/file patterns/entry-point types to the
+# Skills that should be loaded during 06_llm_security_review. Consumed by
+# security-reviewer (see agents/security-reviewer.md "Skill Selection").
+#
+# Matching semantics: a rule matches when ALL keys under its "when" block
+# match (AND). Multiple rules can match the same file/finding -- routing is
+# additive, not exclusive. A rule's `use_skills` are added to the active set
+# for that scope; `always_run` skills are added unconditionally on top.
+#
+# `framework` matches against architecture.schema.json's frameworks[].name
+# (case-insensitive substring). `entry_point_type` matches
+# attack-surface.schema.json's entry_points[].type. `path_glob` matches
+# relative file paths in the current review scope.
+version: "0.2.0"
 
-# TODO: define rules, e.g.:
-# rules:
-#   - when:
-#       path_glob: "**/*.sql"
-#     use_skills: [injection-review]
-#   - when:
-#       framework: express
-#     use_skills: [web-security-review, api-security-review]
+rules:
+  # --- File-pattern signals (fast, unambiguous) ---
+  - when:
+      path_glob: "**/*.sql"
+    use_skills: [injection-review]
 
-rules: []
+  - when:
+      path_glob: "**/Dockerfile*"
+    use_skills: [iac-misconfig-review]
+
+  - when:
+      path_glob: "**/docker-compose*.yml"
+    use_skills: [iac-misconfig-review]
+
+  - when:
+      path_glob: "**/docker-compose*.yaml"
+    use_skills: [iac-misconfig-review]
+
+  - when:
+      path_glob: "**/*.tf"
+    use_skills: [iac-misconfig-review]
+
+  - when:
+      path_glob: "**/k8s/**/*.y*ml"
+    use_skills: [iac-misconfig-review]
+
+  - when:
+      path_glob: "**/kubernetes/**/*.y*ml"
+    use_skills: [iac-misconfig-review]
+
+  - when:
+      path_glob: "**/.github/workflows/*.y*ml"
+    use_skills: [iac-misconfig-review, secrets-detection]
+
+  - when:
+      path_glob: "**/package.json"
+    use_skills: [dependency-cve-check]
+
+  - when:
+      path_glob: "**/requirements*.txt"
+    use_skills: [dependency-cve-check]
+
+  - when:
+      path_glob: "**/pyproject.toml"
+    use_skills: [dependency-cve-check]
+
+  - when:
+      path_glob: "**/pom.xml"
+    use_skills: [dependency-cve-check]
+
+  - when:
+      path_glob: "**/build.gradle*"
+    use_skills: [dependency-cve-check]
+
+  - when:
+      path_glob: "**/*.csproj"
+    use_skills: [dependency-cve-check]
+
+  - when:
+      path_glob: "**/.env*"
+    use_skills: [secrets-detection]
+
+  - when:
+      path_glob: "**/*auth*/**"
+    use_skills: [auth-authz-review]
+
+  - when:
+      path_glob: "**/*session*/**"
+    use_skills: [auth-authz-review]
+
+  - when:
+      path_glob: "**/*payment*/**"
+    use_skills: [business-logic-review, api-security-review]
+
+  - when:
+      path_glob: "**/*billing*/**"
+    use_skills: [business-logic-review, api-security-review]
+
+  - when:
+      path_glob: "**/*checkout*/**"
+    use_skills: [business-logic-review, api-security-review]
+
+  - when:
+      path_glob: "**/*upload*/**"
+    use_skills: [file-security-review]
+
+  - when:
+      path_glob: "**/*webhook*/**"
+    use_skills: [api-security-review]
+
+  - when:
+      path_glob: "**/*crypto*/**"
+    use_skills: [cryptography-review]
+
+  # --- Framework signals (from architecture.schema.json frameworks[]) ---
+  - when:
+      framework: express
+    use_skills: [web-security-review, api-security-review]
+
+  - when:
+      framework: fastify
+    use_skills: [web-security-review, api-security-review]
+
+  - when:
+      framework: nestjs
+    use_skills: [web-security-review, api-security-review]
+
+  - when:
+      framework: spring
+    use_skills: [web-security-review, api-security-review, auth-authz-review]
+
+  - when:
+      framework: django
+    use_skills: [web-security-review, api-security-review, auth-authz-review]
+
+  - when:
+      framework: "django rest framework"
+    use_skills: [api-security-review]
+
+  - when:
+      framework: flask
+    use_skills: [web-security-review, api-security-review]
+
+  - when:
+      framework: fastapi
+    use_skills: [web-security-review, api-security-review]
+
+  - when:
+      framework: react
+    use_skills: [web-security-review]
+
+  - when:
+      framework: next.js
+    use_skills: [web-security-review]
+
+  - when:
+      framework: vue
+    use_skills: [web-security-review]
+
+  - when:
+      framework: angular
+    use_skills: [web-security-review]
+
+  - when:
+      framework: graphql
+    use_skills: [api-security-review]
+
+  - when:
+      framework: "apollo graphql"
+    use_skills: [api-security-review]
+
+  - when:
+      framework: "graphene graphql"
+    use_skills: [api-security-review]
+
+  - when:
+      framework: prisma
+    use_skills: [injection-review]
+
+  - when:
+      framework: typeorm
+    use_skills: [injection-review]
+
+  - when:
+      framework: sequelize
+    use_skills: [injection-review]
+
+  - when:
+      framework: mongoose
+    use_skills: [injection-review]
+
+  - when:
+      framework: sqlalchemy
+    use_skills: [injection-review]
+
+  - when:
+      framework: hibernate
+    use_skills: [injection-review]
+
+  - when:
+      framework: "spring data jpa"
+    use_skills: [injection-review]
+
+  # --- Entry-point-type signals (from attack-surface.schema.json) ---
+  - when:
+      entry_point_type: rest
+    use_skills: [api-security-review]
+
+  - when:
+      entry_point_type: graphql
+    use_skills: [api-security-review]
+
+  - when:
+      entry_point_type: webhook
+    use_skills: [api-security-review]
+
+  - when:
+      entry_point_type: file-upload
+    use_skills: [file-security-review]
+
+  - when:
+      entry_point_type: admin-interface
+    use_skills: [auth-authz-review, api-security-review]
+
+  - when:
+      entry_point_type: websocket
+    use_skills: [web-security-review, api-security-review]
 
 # Skills always run regardless of routing match.
 always_run:
   - secure-code-review
   - secrets-detection
+
+# Applied unconditionally whenever the architecture model shows any IaC
+# presence, independent of specific file matches above.
+architecture_triggered:
+  - when:
+      has_infrastructure: true
+    use_skills: [iac-misconfig-review]

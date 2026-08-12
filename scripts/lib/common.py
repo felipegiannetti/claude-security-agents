@@ -39,7 +39,7 @@ def load_yaml_config(relative_path: str) -> dict:
     if not path.exists():
         return {}
     try:
-        return yaml.safe_load(path.read_text(encoding="utf-8")) or {}
+        return yaml.safe_load(path.read_text(encoding="utf-8-sig")) or {}
     except yaml.YAMLError as exc:
         print(f"warning: failed to parse {relative_path}: {exc}", file=sys.stderr)
         return {}
@@ -91,5 +91,8 @@ def print_json(data) -> None:
 
 
 def read_json_input(input_path: Optional[str]) -> object:
-    text = Path(input_path).read_text(encoding="utf-8") if input_path else sys.stdin.read()
+    text = Path(input_path).read_text(encoding="utf-8-sig") if input_path else sys.stdin.read()
+    # Strip a leading UTF-8 BOM -- PowerShell's pipe (`... | python script.py`)
+    # prepends one by default on Windows, which would otherwise break json.loads.
+    text = text.lstrip("﻿")
     return json.loads(text) if text.strip() else None

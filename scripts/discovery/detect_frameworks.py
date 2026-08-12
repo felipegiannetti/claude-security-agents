@@ -44,7 +44,7 @@ JAVA_SIGNATURES = {
 def detect_from_package_json(path: Path) -> list[dict]:
     findings = []
     try:
-        data = json.loads(path.read_text(encoding="utf-8"))
+        data = json.loads(path.read_text(encoding="utf-8-sig"))
     except (json.JSONDecodeError, OSError):
         return findings
     deps = {**data.get("dependencies", {}), **data.get("devDependencies", {})}
@@ -57,7 +57,7 @@ def detect_from_package_json(path: Path) -> list[dict]:
 def detect_from_requirements(path: Path) -> list[dict]:
     findings = []
     try:
-        text = path.read_text(encoding="utf-8").lower()
+        text = path.read_text(encoding="utf-8-sig").lower()
     except OSError:
         return findings
     for dep_pattern, (name, kind) in PYTHON_SIGNATURES.items():
@@ -69,7 +69,7 @@ def detect_from_requirements(path: Path) -> list[dict]:
 def detect_from_pom(path: Path) -> list[dict]:
     findings = []
     try:
-        text = path.read_text(encoding="utf-8").lower()
+        text = path.read_text(encoding="utf-8-sig").lower()
     except OSError:
         return findings
     for dep_pattern, (name, kind) in JAVA_SIGNATURES.items():

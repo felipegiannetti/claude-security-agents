@@ -1,0 +1,5 @@
+<html><body>
+  <!-- VULNERABLE: the `| safe` filter disables Jinja2's default
+       auto-escaping for `query`, so attacker-controlled markup renders as-is. -->
+  <p>You searched for: {{ query | safe }}</p>
+</body></html>

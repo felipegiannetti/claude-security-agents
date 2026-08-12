@@ -6,7 +6,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "python3 hooks/deny_write_tools.py"
+            "command": "python hooks/deny_write_tools.py"
           }
         ]
       },
@@ -15,7 +15,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "python3 hooks/deny_mutating_bash.py"
+            "command": "python hooks/deny_mutating_bash.py"
           }
         ]
       }

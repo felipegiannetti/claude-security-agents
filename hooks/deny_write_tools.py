@@ -13,7 +13,7 @@ the model as the reason. Exit code 0 allows.
 Wire this up from settings.json, e.g.:
     "PreToolUse": [
       {"matcher": "Edit|Write|NotebookEdit",
-       "hooks": [{"type": "command", "command": "python3 hooks/deny_write_tools.py"}]}
+       "hooks": [{"type": "command", "command": "python hooks/deny_write_tools.py"}]}
     ]
 """
 

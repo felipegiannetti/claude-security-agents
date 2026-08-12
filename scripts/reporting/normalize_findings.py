@@ -59,7 +59,7 @@ def normalize_one(record: dict) -> dict:
 
     cwe_map_path = common.repo_root() / "knowledge" / "cwe" / "cwe-mapping.json"
     try:
-        cwe_map = common.json.loads(cwe_map_path.read_text(encoding="utf-8"))
+        cwe_map = common.json.loads(cwe_map_path.read_text(encoding="utf-8-sig"))
     except (OSError, common.json.JSONDecodeError):
         cwe_map = {}
     if "cwe" not in normalized and normalized["category"] in cwe_map:

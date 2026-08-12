@@ -1,0 +1,8 @@
+{
+  "name": "fixture-vulnerable-dependencies",
+  "private": true,
+  "description": "Vulnerable fixture: known-CVE dependency pinned (CWE-1104). Expected: dependency-cve-check (via run_osv_scanner.py) should flag lodash@4.17.15, which is affected by prototype-pollution advisories fixed in later 4.17.x releases.",
+  "dependencies": {
+    "lodash": "4.17.15"
+  }
+}

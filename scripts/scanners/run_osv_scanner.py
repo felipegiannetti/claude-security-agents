@@ -19,7 +19,12 @@ import common  # noqa: E402
 
 def normalize(raw: dict) -> list[dict]:
     results = []
-    for result in raw.get("results", []):
+    # `raw.get("results", [])` is not enough -- osv-scanner v2 emits a
+    # literal {"results": null} when it finds no package sources at all
+    # (e.g. an empty directory, or the target wasn't a directory), and
+    # .get()'s default only applies when the key is absent, not when
+    # present with a None value.
+    for result in raw.get("results") or []:
         source = (result.get("source") or {}).get("path")
         for pkg in result.get("packages", []) or []:
             package_info = pkg.get("package", {})
@@ -62,7 +67,15 @@ def main() -> int:
         common.print_json({"tool": "osv-scanner", "skipped": True, "reason": "disabled in config/scanners.config.yaml"})
         return 0
 
-    run = common.run_tool(["osv-scanner", "--format", "json", "--recursive", args.path], timeout=600)
+    # osv-scanner v2's CLI requires the "scan source" subcommand (the old
+    # flat "osv-scanner --format json --recursive <path>" form from v1 is
+    # no longer valid and silently walks the wrong root instead of erroring
+    # clearly). --allow-no-lockfiles lets it still resolve versions from a
+    # bare manifest (e.g. package.json) when no lockfile is present.
+    run = common.run_tool(
+        ["osv-scanner", "scan", "source", "--format", "json", "--recursive", "--allow-no-lockfiles", args.path],
+        timeout=600,
+    )
 
     # osv-scanner exits non-zero when vulnerabilities are found -- expected, not a failure.
     if not run["ok"]:

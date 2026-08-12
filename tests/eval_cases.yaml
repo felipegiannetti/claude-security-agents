@@ -20,7 +20,14 @@ cases:
     safe_path: fixtures/xss/safe/app.py
     skill: web-security-review
     reference: skills/web-security-review/references/xss.md
-    scanner: semgrep
+    # Verified empirically (2026-08): semgrep's default "auto" ruleset does
+    # not flag a Jinja2 `| safe` filter in a separate .html template file --
+    # it only has a rule for the render_template_string() *sink itself*
+    # (SSTI-flavored, fires regardless of escaping, which made both fixtures
+    # false-positive when they shared that sink -- see git history). The
+    # actual "is this specific interpolation escaped" question needs
+    # semantic reasoning, not a default pattern rule.
+    scanner: null
 
   - id: secrets-001
     category: hardcoded-credential-live
@@ -37,3 +44,63 @@ cases:
     skill: api-security-review
     reference: skills/api-security-review/references/bola-idor.md
     scanner: null  # not scanner-detectable -- requires LLM review (06_llm_security_review)
+
+  - id: authentication-001
+    category: insecure-jwt-verification
+    vulnerable_path: fixtures/authentication/vulnerable/app.py
+    safe_path: fixtures/authentication/safe/app.py
+    skill: auth-authz-review
+    reference: skills/auth-authz-review/references/jwt.md
+    scanner: null  # algorithm-pinning absence needs semantic reasoning, not a safe default-ruleset bet
+
+  - id: authorization-001
+    category: broken-function-level-authorization
+    vulnerable_path: fixtures/authorization/vulnerable/app.py
+    safe_path: fixtures/authorization/safe/app.py
+    skill: api-security-review
+    reference: skills/api-security-review/references/broken-function-authorization.md
+    scanner: null  # same reasoning as idor-001 -- requires LLM review
+
+  - id: command-injection-001
+    category: command-injection
+    vulnerable_path: fixtures/command-injection/vulnerable/app.py
+    safe_path: fixtures/command-injection/safe/app.py
+    skill: injection-review
+    reference: skills/injection-review/references/command-injection.md
+    scanner: semgrep
+
+  - id: dependencies-001
+    category: vulnerable-dependency
+    # osv-scanner scans a directory tree (it needs the lockfile alongside
+    # the manifest to resolve exact versions), not a single manifest file --
+    # pointing this at package.json directly makes it report "no package
+    # sources found."
+    vulnerable_path: fixtures/dependencies/vulnerable
+    safe_path: fixtures/dependencies/safe
+    skill: dependency-cve-check
+    reference: skills/dependency-cve-check/references/osv.md
+    scanner: osv-scanner
+
+  - id: file-upload-001
+    category: unrestricted-file-upload
+    vulnerable_path: fixtures/file-upload/vulnerable/app.py
+    safe_path: fixtures/file-upload/safe/app.py
+    skill: file-security-review
+    reference: skills/file-security-review/references/file-upload.md
+    scanner: null  # content-validation absence is not a safe generic-ruleset bet across frameworks
+
+  - id: ssrf-001
+    category: ssrf
+    vulnerable_path: fixtures/ssrf/vulnerable/app.py
+    safe_path: fixtures/ssrf/safe/app.py
+    skill: web-security-review
+    reference: skills/web-security-review/references/ssrf.md
+    scanner: null  # "is the destination validated" requires contextual reasoning, not just a sink pattern
+
+  - id: business-logic-001
+    category: race-condition
+    vulnerable_path: fixtures/business-logic/vulnerable/app.py
+    safe_path: fixtures/business-logic/safe/app.py
+    skill: business-logic-review
+    reference: skills/business-logic-review/references/race-conditions.md
+    scanner: null  # race conditions are never scanner-detectable -- inherently a concurrency/logic reasoning task
