@@ -1,3 +1,46 @@
 # Remediation Effort Matrix
-# TODO: define levels and criteria.
-levels: []
+#
+# Narrative criteria for effort estimates. The operational
+# category->effort defaults used by prompts/remediation_prompt.md live in
+# config/remediation.config.yaml; this file documents the reasoning.
+version: "0.1.0"
+
+levels:
+  - id: trivial
+    criteria: >
+      A localized, mechanical change with no design decision required --
+      e.g. swap a string-concatenated query for a parameterized one at a
+      single call site, rotate a leaked credential, add a missing response
+      header.
+    typical_scope: single call site, single file
+
+  - id: small
+    criteria: >
+      A contained change requiring a small design decision but no
+      architectural impact -- e.g. add a validation rule, enable a
+      framework's built-in CSRF middleware, swap a weak crypto primitive
+      for a recommended one.
+    typical_scope: one file to a handful of related files
+
+  - id: medium
+    criteria: >
+      Requires a real design decision and touches multiple call sites or
+      introduces a new mechanism -- e.g. add an ownership check consistently
+      across several endpoints, introduce a DTO layer to stop mass
+      assignment, add rate limiting to a set of sensitive endpoints.
+    typical_scope: multiple files, one module/feature area
+
+  - id: large
+    criteria: >
+      Requires a structural or cross-cutting change -- e.g. redesign an
+      authentication/authorization model, replatform a rate-limiting
+      strategy at the infrastructure level, address a finding whose root
+      cause is a security architecture smell (see
+      skills/architecture-review/references/security-architecture-smells.md)
+      spanning many files.
+    typical_scope: cross-module or infrastructure-level
+
+# Effort is deliberately separate from severity/priority: a trivial-effort
+# critical finding and a large-effort critical finding both deserve urgency,
+# but the trivial one has essentially no excuse for delay (see
+# config/priority.config.yaml weights.remediation_effort).

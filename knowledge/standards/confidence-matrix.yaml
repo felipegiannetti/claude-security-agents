@@ -1,3 +1,36 @@
 # Confidence Matrix
-# TODO: define levels and criteria.
-levels: []
+#
+# How much of a finding's claimed source-to-sink path and security controls
+# were actually confirmed, vs. assumed. See finding.schema.json's
+# "confidence" field and skills/secure-code-review/references/data-flow-analysis.md.
+version: "0.1.0"
+
+levels:
+  - id: HIGH
+    criteria: >
+      Every step of the relevant data flow was read directly in code (not
+      inferred), attacker control of the source is confirmed, the sink's
+      danger in this exact context is confirmed, and no unresolved question
+      remains about applicable controls (validation, auth, framework
+      protection). Independent verification (and, when performed, dynamic
+      validation) agrees.
+
+  - id: MEDIUM
+    criteria: >
+      The core source-to-sink path is confirmed, but at least one secondary
+      element relies on reasonable inference rather than direct confirmation
+      (e.g. a framework's documented default behavior wasn't independently
+      re-verified against the actual configuration in use).
+
+  - id: LOW
+    criteria: >
+      A plausible vulnerability pattern was identified, but one or more
+      material steps in the path could not be confirmed (reachability,
+      attacker control, or a specific control's effect) -- see
+      skills/secure-code-review/references/data-flow-analysis.md "When
+      Tracing Stalls".
+
+# A CONFIRMED finding should normally carry HIGH or MEDIUM confidence.
+# LOW-confidence candidates should generally remain unconfirmed
+# (NEEDS_MORE_EVIDENCE) rather than being promoted -- see
+# config/agent.config.yaml "verification.min_confidence_to_confirm".

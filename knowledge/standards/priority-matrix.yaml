@@ -1,3 +1,48 @@
 # Priority Matrix
-# TODO: define levels and criteria.
-levels: []
+#
+# Narrative criteria for remediation urgency. Priority != severity -- see
+# CLAUDE.md "Severity and Priority". The operational weighting/scoring used
+# by scripts/reporting/calculate_priorities.py lives in
+# config/priority.config.yaml; this file documents the reasoning.
+version: "0.1.0"
+
+levels:
+  - id: P0
+    label: Immediate
+    criteria: >
+      Fix now, out of band if necessary. Typically critical/high severity,
+      unauthenticated or low-privilege exploitation, internet-facing, and/or
+      CISA KEV-listed (actively exploited in the wild -- see
+      skills/dependency-cve-check/references/kev-correlation.md).
+
+  - id: P1
+    label: High
+    criteria: >
+      Fix within the current remediation cycle. High severity with some
+      mitigating precondition, or critical severity with reduced confidence
+      pending further evidence.
+
+  - id: P2
+    label: Medium
+    criteria: >
+      Fix soon, normal backlog priority. Medium severity, or high severity
+      with meaningful preconditions (privileged access required, internal-only
+      exposure) that substantially reduce realistic exploitability.
+
+  - id: P3
+    label: Low
+    criteria: >
+      Backlog item. Low severity, or higher severity with a high
+      remediation-effort-to-risk-reduction ratio and no other urgency signal.
+
+  - id: P4
+    label: Informational
+    criteria: >
+      No action required for security purposes; tracked for awareness or as
+      input to a future architecture recommendation (see
+      workflow/stages/13_security_architecture_recommendations.md).
+
+# Priority is never assigned by severity alone -- see
+# config/priority.config.yaml "weights" for exploitability, exposure,
+# privileges required, affected data sensitivity, blast radius, confidence,
+# and remediation effort, plus the CISA KEV floor overrides.

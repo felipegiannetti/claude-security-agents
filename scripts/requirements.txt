@@ -1,0 +1,12 @@
+# Dependencies for scripts/. Deterministic tooling only (see CLAUDE.md
+# scripts/) -- no LLM/agent SDK dependency belongs here.
+#
+# YAML config loading (config/*.yaml, knowledge/standards/*.yaml)
+pyyaml>=6.0
+#
+# External scanners invoked via subprocess are NOT Python dependencies --
+# install them separately and ensure they're on PATH:
+#   semgrep      https://semgrep.dev/docs/getting-started/
+#   gitleaks     https://github.com/gitleaks/gitleaks
+#   trivy        https://aquasecurity.github.io/trivy/
+#   osv-scanner  https://github.com/google/osv-scanner

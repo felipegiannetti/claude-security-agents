@@ -1,3 +1,48 @@
 # Severity Matrix
-# TODO: define levels and criteria.
-levels: []
+#
+# Narrative criteria for each severity level. Severity is technical and
+# business impact -- distinct from priority (remediation urgency), see
+# priority-matrix.yaml and CLAUDE.md's "Severity and Priority". The
+# operational category->severity mapping used by scripts lives in
+# config/severity.config.yaml; this file documents the reasoning behind it.
+version: "0.1.0"
+
+levels:
+  - id: critical
+    criteria: >
+      Full compromise of confidentiality, integrity, or availability with no
+      meaningful precondition -- e.g. unauthenticated remote code execution,
+      full authentication bypass, unrestricted access to all users' sensitive
+      data. An attacker with no special access can cause severe damage.
+    examples: [sql-injection, command-injection, code-injection, authentication-bypass, remote-code-execution]
+
+  - id: high
+    criteria: >
+      Significant compromise, but requiring some precondition -- limited
+      attacker privileges, a specific configuration, or a narrower blast
+      radius than "critical" (e.g. one user's data rather than all users').
+    examples: [broken-object-level-authorization, ssrf, stored-xss, insecure-deserialization, path-traversal]
+
+  - id: medium
+    criteria: >
+      Real impact, but bounded -- requires more attacker effort/social
+      engineering, affects less sensitive data, or the compromise is
+      partial (e.g. read-only where write would be critical).
+    examples: [reflected-xss, csrf, weak-cryptography, mass-assignment]
+
+  - id: low
+    criteria: >
+      Limited direct impact on its own; often a hardening item or a
+      contributor to a more severe issue when chained.
+    examples: [open-redirect, clickjacking, missing-security-headers]
+
+  - id: informational
+    criteria: >
+      No direct exploitable impact identified; noted for completeness,
+      awareness, or as a false-positive-adjacent observation (e.g. a
+      placeholder credential, a test-only weak configuration).
+    examples: [hardcoded-credential-placeholder]
+
+# A severity assigned here is a starting point (08_security_triage) --
+# security-verifier may adjust it once the actual attack scenario is
+# confirmed. See agents/security-verifier.md "Severity Review".
