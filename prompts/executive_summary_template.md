@@ -17,19 +17,21 @@ Audience: CTOs, engineering managers, and other non-security-specialist decision
 
 | Severity | Count |
 |---|---|
-| Critical | {{finding_counts.by_severity.critical}} |
-| High | {{finding_counts.by_severity.high}} |
-| Medium | {{finding_counts.by_severity.medium}} |
-| Low | {{finding_counts.by_severity.low}} |
-| Informational | {{finding_counts.by_severity.informational}} |
+| Critical | {{application_security.finding_counts.by_severity.critical}} |
+| High | {{application_security.finding_counts.by_severity.high}} |
+| Medium | {{application_security.finding_counts.by_severity.medium}} |
+| Low | {{application_security.finding_counts.by_severity.low}} |
+| Informational | {{application_security.finding_counts.by_severity.informational}} |
 
 | Priority | Count | Meaning |
 |---|---|---|
-| P0 | {{finding_counts.by_priority.P0}} | Fix immediately |
-| P1 | {{finding_counts.by_priority.P1}} | Fix this cycle |
-| P2 | {{finding_counts.by_priority.P2}} | Fix soon |
-| P3 | {{finding_counts.by_priority.P3}} | Backlog |
-| P4 | {{finding_counts.by_priority.P4}} | Informational / hardening |
+| P0 | {{application_security.finding_counts.by_priority.P0}} | Fix immediately |
+| P1 | {{application_security.finding_counts.by_priority.P1}} | Fix this cycle |
+| P2 | {{application_security.finding_counts.by_priority.P2}} | Fix soon |
+| P3 | {{application_security.finding_counts.by_priority.P3}} | Backlog |
+| P4 | {{application_security.finding_counts.by_priority.P4}} | Informational / hardening |
+
+{{If software_architecture.recommendations is non-empty, add a short second glance table for ARCH-P0..ARCH-P3 counts here — architecture recommendations are a separate axis from vulnerabilities and should read as "structural improvements," not additional vulnerabilities.}}
 
 ### What This Means for the Business
 

@@ -13,8 +13,9 @@ Establish the exact scope of the review before any analysis begins. An undefined
 
 1. Resolve the target using `scripts/git/repository_info.py` (remote, default branch, current commit) and, if scope is a diff/PR, `scripts/git/fetch_diff.py` + `scripts/git/changed_files.py`.
 2. Apply `config/exclusions.yaml` to drop vendored/generated/build paths from scope.
-3. Classify the review type: `full-repository`, `diff`, or `pull-request`. This determines whether `02_architecture_discovery` builds a full model or an incremental one anchored on `architecture.schema.json` from a prior run if available.
-4. Record the scope decision — this is what every later stage's "in scope" / "out of scope" judgment is measured against.
+3. Classify the review type: `full-repository`, `diff`, or `pull-request`. This determines whether `03_architecture_mapping` builds a full model or an incremental one anchored on `architecture.schema.json` from a prior run if available.
+4. Determine whether dynamic/pentest validation (`10_dynamic_pentest_validation`) is even a candidate for this review — it requires an explicitly authorized target in `config/pentest.config.yaml`; if none is configured, that stage is skipped entirely rather than attempted and blocked later.
+5. Record the scope decision — this is what every later stage's "in scope" / "out of scope" judgment is measured against.
 
 ## Outputs
 

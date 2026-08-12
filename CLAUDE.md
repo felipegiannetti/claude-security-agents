@@ -16,13 +16,15 @@ The project combines:
 - attack surface mapping;
 - data-flow analysis;
 - independent finding verification;
+- optional, disabled-by-default dynamic security validation against explicitly authorized targets;
+- software architecture assessment and evidence-based structural recommendations;
 - remediation prioritization;
 - structured security reporting;
 - regression and false-positive testing.
 
-The primary objective is to identify real, exploitable security vulnerabilities while minimizing false positives.
+The primary objective is twofold: identify real, exploitable security vulnerabilities while minimizing false positives, and understand whether the system's own structure contributes to security risk, low maintainability, excessive coupling, or difficulty applying security controls. These are evaluated as two related but distinct axes -- see "Final Security Report".
 
-The system must be reusable across different repositories, languages, frameworks, and application architectures.
+The system must be reusable across different repositories, languages, frameworks, and application architectures. It does not have a favorite architecture or a default "correct" folder structure -- see [architecture-review skill](skills/architecture-review/SKILL.md).
 
 ---
 
@@ -60,6 +62,8 @@ Initial agents:
 - `architecture-mapper.md`
 - `security-reviewer.md`
 - `security-verifier.md`
+- `architecture-advisor.md` -- software architecture assessment and recommendations. Strictly read-only, same as the three above.
+- `pentest-validator.md` -- optional, disabled-by-default dynamic security validation. The **one** agent in this project that is not read-only against a running target (it remains strictly read-only against the analyzed *source repository*). Never active unless explicitly enabled and authorized -- see "Security Safety".
 
 Agents coordinate reasoning and security analysis.
 
@@ -86,18 +90,22 @@ Defines the deterministic security review lifecycle.
 The canonical pipeline is:
 
 1. Intake
-2. Architecture Discovery
-3. Attack Surface Mapping
-4. Static Scan
-5. LLM Security Review
-6. Data Flow Analysis
-7. Triage
-8. Independent Verification
-9. Prioritization
-10. Remediation Analysis
-11. Final Report
+2. Software Context Discovery
+3. Architecture Mapping
+4. Attack Surface Mapping
+5. Static Security Scanning
+6. LLM Security Review
+7. Data Flow Analysis
+8. Security Triage
+9. Independent Verification
+10. Dynamic / Pentest Validation (optional -- see "Security Safety")
+11. Security Prioritization
+12. Architecture Assessment
+13. Security Architecture Recommendations
+14. Remediation Analysis
+15. Final Report
 
-Do not skip pipeline stages unless explicitly permitted by workflow configuration.
+Do not skip pipeline stages unless explicitly permitted by workflow configuration. Stage 10 is the one stage that is *always* skipped unless explicitly enabled and authorized -- skipping it is the safe default, not an exception to "don't skip stages."
 
 ### knowledge/
 
@@ -143,12 +151,14 @@ Contains structured contracts for internal data.
 
 Important schemas include:
 
+- software context
 - architecture
 - attack surface
 - scan result
-- finding
+- finding (includes the Static Analysis / Independent Verification / Dynamic Validation evidence layers)
 - remediation
-- final report
+- architecture recommendation (`ARCH-*`, distinct from `finding`)
+- final report (both axes: application security and software architecture)
 
 Structured data should be preferred between pipeline stages whenever practical.
 
@@ -213,6 +223,8 @@ If exploitability cannot be established, the finding must either:
 
 Never silently promote uncertain findings.
 
+Architecture recommendations (`ARCH-*`, produced by `architecture-advisor`) do not follow this lifecycle -- they are not vulnerabilities and are never "confirmed" or "rejected" in the same sense. They move from ASSESSED (a structural problem identified with evidence) to RECOMMENDED (a specific, justified recommendation with a priority). See "Final Security Report" for why the two are kept structurally separate.
+
 ---
 
 ## Independent Verification
@@ -235,6 +247,16 @@ It must inspect:
 - actual reachability of the sink.
 
 A finding surviving independent verification may be promoted to CONFIRMED.
+
+---
+
+## Dynamic Validation (Optional)
+
+Some findings -- typically BOLA/IDOR, SSRF, authentication/authorization issues -- benefit from confirmation against a real, running instance of the application, beyond what static analysis and independent verification can establish from code alone. This is `pentest-validator`'s role, and it is optional and disabled by default.
+
+A finding accumulates up to three independent evidence layers, tracked separately and never merged into a single number: **Static Analysis** (from `security-reviewer`), **Independent Verification** (from `security-verifier`), and **Dynamic Validation** (from `pentest-validator`, only when that stage actually ran). A finding with all three layers agreeing represents materially stronger evidence than one with static analysis alone -- but the absence of dynamic validation never counts against a finding; it simply means that layer wasn't attempted.
+
+See "Security Safety" for the strict boundaries `pentest-validator` operates under.
 
 ---
 
@@ -294,26 +316,15 @@ Remediation recommendations must be appropriate for the detected language and fr
 
 ## Final Security Report
 
-The final security report must contain both executive and technical information.
+The final security report has two axes, kept structurally and visually separate:
 
-At minimum include:
+**Application Security** -- confirmed vulnerabilities (`SEC-*`). At minimum include: Executive Summary, Overall Risk, Finding Counts, Priority Overview, Confirmed Findings, Evidence, Attack Vectors, Data Flows, Exploitation Scenarios (and Dynamic Validation results when that layer was run), Business Impact, Consequences if Unresolved, Recommended Remediation, Remediation Effort, Verification Steps, Remediation Roadmap.
 
-- Executive Summary
-- Overall Risk
-- Finding Counts
-- Priority Overview
-- Confirmed Findings
-- Evidence
-- Attack Vectors
-- Data Flows
-- Exploitation Scenarios
-- Business Impact
-- Consequences if Unresolved
-- Recommended Remediation
-- Remediation Effort
-- Verification Steps
-- Remediation Roadmap
-- Final Conclusion
+**Software Architecture** -- structural recommendations (`ARCH-*`), when `12_architecture_assessment` / `13_security_architecture_recommendations` ran. At minimum include: current-state summary, strengths, structural problems with evidence, security-relevant technical debt, recommended organization, architecture recommendations (with benefits, costs, risks, complexity, and a phased path -- never a single "rewrite everything" step), and an architecture roadmap.
+
+A single **Final Conclusion** ties both axes together.
+
+An imperfect architecture must never be presented as a vulnerability, and a vulnerability must never be softened into a mere architecture recommendation. See CLAUDE.md's Finding Lifecycle and Architecture recommendation lifecycle above, and [schemas/report.schema.json](schemas/report.schema.json) for the structural contract.
 
 Reports should support structured output where possible.
 
@@ -321,7 +332,7 @@ Target formats:
 
 - Markdown
 - JSON
-- SARIF
+- SARIF (Application Security axis only -- SARIF has no meaningful representation for architecture recommendations)
 
 ---
 
@@ -361,6 +372,18 @@ Do not automatically:
 - perform destructive infrastructure actions.
 
 Such actions require explicit user authorization and must remain outside the default review pipeline.
+
+### The Dynamic Validation Exception
+
+`pentest-validator` (stage `10_dynamic_pentest_validation`) is a deliberate, narrowly-scoped exception to "read-only against everything" -- it is read-only against the analyzed *source repository* like every other agent, but it may send requests to a *running* application instance to confirm specific findings. This exception exists because dynamic confirmation genuinely strengthens evidence quality (see "Dynamic Validation" above), and it is bounded as follows, with no exceptions:
+
+1. **Disabled by default.** `config/pentest.config.yaml` ships with `enabled: false` and an empty target list. Dynamic validation never runs unless a human has explicitly changed both.
+2. **Allowlist only, never inferred.** A target must be listed verbatim in `config/pentest.config.yaml`. A URL appearing in the analyzed repository's code, configuration, or documentation is never treated as authorization to test it.
+3. **Non-production by default.** An allowlist entry must be development, staging, or homologation unless it explicitly sets `production_authorized: true`.
+4. **No destructive or disruptive action, ever**, regardless of authorization: no data deletion or alteration beyond the trivial minimum needed to observe a behavior, no denial-of-service, no persistence, no lateral movement beyond the single authorized target, no infrastructure changes, no bulk data extraction, no credential brute-forcing. See `agents/pentest-validator.md` for the full list.
+5. **Confirmation-scoped, not exploratory.** Each test validates one specific claim from one specific finding -- never a broad scan of the target.
+
+Tools like OWASP ZAP, Nuclei, the Burp Suite API, or custom HTTP validators may be integrated in the future, but any such integration is subject to every rule above without exception -- the gate is the point, not the specific tool.
 
 ---
 

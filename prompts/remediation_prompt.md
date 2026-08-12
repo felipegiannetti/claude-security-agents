@@ -1,6 +1,6 @@
 # Remediation Prompt
 
-Used by [10_remediation_analysis](../workflow/stages/10_remediation_analysis.md).
+Used by [14_remediation_analysis](../workflow/stages/14_remediation_analysis.md).
 
 ---
 

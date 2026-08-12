@@ -1,4 +1,4 @@
-# Stage 02: Architecture Discovery
+# Stage 03: Architecture Mapping
 
 ## Purpose
 
@@ -11,6 +11,7 @@ Build the architectural context that every later stage depends on. No vulnerabil
 ## Inputs
 
 - The review scope from `01_intake`.
+- The software context from `02_software_context_discovery` (business domain, criticality, users, expected scale) — this shapes how much architectural depth is worth investing in and feeds `12_architecture_assessment` later.
 - For diff/PR scope: the full repository is still available for context, even though only changed files are the primary review target — architectural context should not be limited to just the diff.
 
 ## Process

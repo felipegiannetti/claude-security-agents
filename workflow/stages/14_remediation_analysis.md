@@ -1,4 +1,4 @@
-# Stage 10: Remediation Analysis
+# Stage 14: Remediation Analysis
 
 ## Purpose
 
@@ -10,7 +10,8 @@ Turn each confirmed, prioritized finding into actionable guidance — what's wro
 
 ## Inputs
 
-- `CONFIRMED` findings with an assigned `priority` from `09_prioritization`.
+- `CONFIRMED` findings with an assigned `priority` from `11_security_prioritization`.
+- Architecture recommendations from `13_security_architecture_recommendations`, where a finding's root cause is structural (e.g. authorization scattered across controllers) — remediation guidance for the individual finding should note the related `ARCH-*` recommendation rather than treat the two as unrelated.
 - The detected language/framework from the architecture model, so guidance is idiomatic (e.g. parameterized queries via the specific ORM in use, not generic advice).
 
 ## Process

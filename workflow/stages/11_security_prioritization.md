@@ -1,4 +1,4 @@
-# Stage 09: Prioritization
+# Stage 11: Security Prioritization
 
 ## Purpose
 
@@ -10,7 +10,8 @@ Convert confirmed findings into a remediation order. Severity and priority are s
 
 ## Inputs
 
-- `CONFIRMED` findings from `08_verification`, each with severity, confidence, and (for dependency findings) KEV correlation data.
+- `CONFIRMED` findings from `09_independent_verification`, each with severity, confidence, and (for dependency findings) KEV correlation data.
+- Dynamic validation results from `10_dynamic_pentest_validation`, when that stage ran — a finding with a successful dynamic confirmation should not score lower in confidence-derived weighting than one verified statically only.
 
 ## Process
 

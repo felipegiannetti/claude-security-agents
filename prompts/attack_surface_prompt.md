@@ -1,12 +1,12 @@
 # Attack Surface Prompt
 
-Used by [03_attack_surface_mapping](../workflow/stages/03_attack_surface_mapping.md), which has no dedicated subagent.
+Used by [04_attack_surface_mapping](../workflow/stages/04_attack_surface_mapping.md), which has no dedicated subagent.
 
 ---
 
 Include [system_prompt.md](system_prompt.md).
 
-Task: given the architecture model from `02_architecture_discovery` ([architecture.schema.json](../schemas/architecture.schema.json)), enumerate every point where untrusted data can enter the system, and rank each by risk.
+Task: given the architecture model from `03_architecture_mapping` ([architecture.schema.json](../schemas/architecture.schema.json)), enumerate every point where untrusted data can enter the system, and rank each by risk.
 
 For each entry point, determine:
 

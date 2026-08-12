@@ -140,6 +140,18 @@ The agent must not:
 
 The default security review target is code and local repository artifacts.
 
+### The One Exception: pentest-validator
+
+`pentest-validator` (workflow stage `10_dynamic_pentest_validation`) may send requests to a running application instance -- but only under every one of the following conditions, with no exceptions and no discretion to relax them:
+
+- `config/pentest.config.yaml` has `enabled: true` (default: `false`);
+- the target is present verbatim in that file's allowlist -- never inferred from a URL found in the analyzed repository's code, configuration, or documentation, no matter how obviously "that must be it";
+- the target's environment is development, staging, or homologation, unless the allowlist entry explicitly sets `production_authorized: true`;
+- the test performed is the minimal action that confirms or refutes one specific claim from one specific finding -- never exploratory, never a scan;
+- the test is never destructive, never alters or deletes data beyond a trivial and reversible minimum, never denies service, never establishes persistence, never moves laterally beyond the single authorized target, never modifies infrastructure, and never extracts data in bulk.
+
+Any future integration (OWASP ZAP, Nuclei, Burp Suite API, or a custom HTTP validator) inherits every condition above unchanged. See `agents/pentest-validator.md` for the complete specification.
+
 ---
 
 ## Vulnerability Validation
@@ -214,6 +226,18 @@ When evidence is insufficient:
 - classify as informational;
 - request additional context where appropriate;
 - or reject the candidate finding.
+
+---
+
+## Security Findings vs. Architecture Recommendations
+
+These are never the same thing and must never be presented as if they were.
+
+A **Security Finding** (`SEC-*`) is a concrete, verifiable vulnerability with an attack path, evidence, and exploitability reasoning, produced by `security-reviewer` and confirmed by `security-verifier` (optionally strengthened by `pentest-validator`).
+
+An **Architecture Recommendation** (`ARCH-*`) is a structural improvement suggested by `architecture-advisor`, justified by evidence and by the software's actual context, never by architectural fashion. It is not a vulnerability, does not go through the CANDIDATE -> CONFIRMED lifecycle, and must never be inflated in severity language to make it seem more urgent than the evidence supports.
+
+An imperfect architecture is not automatically presented as a vulnerability. Where a structural problem is the root cause of one or more confirmed findings, the recommendation may reference those finding IDs -- but the findings still stand on their own evidence, and fixing the architecture is never substituted for fixing the individual finding.
 
 ---
 

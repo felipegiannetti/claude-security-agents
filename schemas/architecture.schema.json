@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://security-review-agent/schemas/architecture.schema.json",
   "title": "Architecture Model",
-  "description": "Output of agents/architecture-mapper.md (stage 02_architecture_discovery). The architectural context every later stage depends on.",
+  "description": "Output of agents/architecture-mapper.md (stage 03_architecture_mapping). The architectural context every later stage depends on.",
   "type": "object",
   "properties": {
     "repository": {

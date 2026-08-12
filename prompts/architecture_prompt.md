@@ -1,6 +1,6 @@
 # Architecture Prompt
 
-Standalone prompt for running architecture discovery outside the full pipeline — e.g. "just map this repo's architecture" without a full review. For the full methodology used in `02_architecture_discovery`, see [agents/architecture-mapper.md](../agents/architecture-mapper.md); this is the condensed version for a narrower, one-off invocation.
+Standalone prompt for running architecture discovery outside the full pipeline — e.g. "just map this repo's architecture" without a full review. For the full methodology used in `03_architecture_mapping`, see [agents/architecture-mapper.md](../agents/architecture-mapper.md); this is the condensed version for a narrower, one-off invocation.
 
 ---
 

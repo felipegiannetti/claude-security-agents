@@ -68,6 +68,14 @@ Estimated effort: {{remediation.effort}}
 **Priority Rationale**
 
 {{prioritization_prompt.md output — why this landed at this priority}}
+
+**Evidence Layers**
+
+- Static Analysis: {{one-line summary of the scanner/source-to-sink evidence from security-reviewer}}
+- Independent Verification: {{verification.exploitability_conclusion}}
+{{if dynamic_validation.performed: "- Dynamic Validation: " + dynamic_validation.result + " — " + dynamic_validation.observation, tested against dynamic_validation.target under dynamic_validation.authorization_reference}}
+
+{{if related_architecture_recommendations is non-empty: "**Related Architecture Recommendations**" followed by the listed ARCH-NNN IDs — cross-reference only, does not substitute for this finding's own remediation above.}}
 ```
 
 For `REJECTED` findings that are surfaced in an appendix (optional, for transparency/audit), render only: id, title, category, and `false_positive_analysis.conclusion` — no exploitation scenario or remediation section, since none applies.

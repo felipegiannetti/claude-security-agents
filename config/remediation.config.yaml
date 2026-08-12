@@ -1,4 +1,4 @@
-# Remediation guidance configuration for 10_remediation_analysis.
+# Remediation guidance configuration for 14_remediation_analysis.
 # See knowledge/standards/remediation-effort-matrix.yaml for the narrative
 # criteria this encodes.
 version: "0.1.0"

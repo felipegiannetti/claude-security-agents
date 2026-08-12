@@ -1,0 +1,67 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://security-review-agent/schemas/software-context.schema.json",
+  "title": "Software Context",
+  "description": "Output of 02_software_context_discovery. Business/domain context the architecture assessment and recommendations are evaluated against -- see CLAUDE.md and agents/architecture-advisor.md.",
+  "type": "object",
+  "properties": {
+    "domain": {
+      "type": "object",
+      "properties": {
+        "description": { "type": "string" },
+        "confidence": { "type": "string", "enum": ["evidenced", "inferred", "provided-by-requester"] },
+        "evidence": { "type": "array", "items": { "type": "string" } }
+      },
+      "required": ["description", "confidence"]
+    },
+    "purpose": {
+      "type": "string",
+      "description": "What the system is for, in one or two sentences."
+    },
+    "user_base": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "type": { "type": "string", "enum": ["public-internet", "authenticated-customer", "internal-staff", "machine-to-machine", "partner-organization"] },
+          "estimated_scale": { "type": "string" }
+        },
+        "required": ["type"]
+      }
+    },
+    "criticality": {
+      "type": "object",
+      "properties": {
+        "level": { "type": "string", "enum": ["low", "medium", "high", "critical"] },
+        "rationale": { "type": "string" }
+      },
+      "required": ["level", "rationale"]
+    },
+    "compliance_context": {
+      "type": "array",
+      "description": "Explicit or implied regulatory/compliance signals (e.g. PCI-DSS, HIPAA, SOC2, GDPR).",
+      "items": {
+        "type": "object",
+        "properties": {
+          "regime": { "type": "string" },
+          "evidence": { "type": "string" }
+        },
+        "required": ["regime"]
+      }
+    },
+    "team_signals": {
+      "type": "object",
+      "description": "Inferred from repo structure/history where available -- optional, low-confidence by nature.",
+      "properties": {
+        "apparent_team_count": { "type": "string" },
+        "evidence": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "uncertainties": {
+      "type": "array",
+      "description": "Explicit list of context claims made with low confidence -- consumed by architecture-advisor to avoid over-justifying recommendations on shaky context.",
+      "items": { "type": "string" }
+    }
+  },
+  "required": ["purpose", "criticality"]
+}

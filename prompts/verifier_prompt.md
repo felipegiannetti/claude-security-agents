@@ -1,6 +1,6 @@
 # Verifier Prompt
 
-Condensed task prompt corresponding to [agents/security-verifier.md](../agents/security-verifier.md) — used by `08_verification` for a standalone re-verification of a single finding (e.g. re-checking one finding after new evidence surfaces) outside a full pipeline run.
+Condensed task prompt corresponding to [agents/security-verifier.md](../agents/security-verifier.md) — used by `09_independent_verification` for a standalone re-verification of a single finding (e.g. re-checking one finding after new evidence surfaces) outside a full pipeline run.
 
 ---
 

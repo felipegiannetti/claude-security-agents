@@ -1,0 +1,61 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://security-review-agent/schemas/architecture-recommendation.schema.json",
+  "title": "Architecture Recommendation",
+  "description": "An ARCH-NNN structural recommendation, distinct from a SEC-NNN vulnerability finding (see finding.schema.json). Produced in 13_security_architecture_recommendations. Never applied automatically -- text-only guidance, same as remediation.schema.json.",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^ARCH-[0-9]{3,}$"
+    },
+    "title": { "type": "string" },
+    "category": {
+      "type": "string",
+      "enum": ["layering", "module-boundaries", "monolith-vs-services", "authorization-centralization", "data-access-boundary", "integration-gateway", "secrets-handling", "trust-boundary-definition", "other"]
+    },
+    "priority": {
+      "type": "string",
+      "enum": ["ARCH-P0", "ARCH-P1", "ARCH-P2", "ARCH-P3"],
+      "description": "Critical architectural risk / High-value structural improvement / Recommended evolution / Optional optimization. A distinct scale from finding.schema.json's P0-P4 -- never conflated with it."
+    },
+    "assessed_problem": {
+      "type": "string",
+      "description": "The specific problem from 12_architecture_assessment this recommendation addresses, with evidence (file references)."
+    },
+    "recommendation": {
+      "type": "string",
+      "description": "What to change, specifically."
+    },
+    "rationale": {
+      "type": "string",
+      "description": "Why, tied to assessed_problem and software-context.schema.json -- never a generic best-practice citation alone."
+    },
+    "security_implications": {
+      "type": "string",
+      "description": "How this specifically affects security posture (e.g. centralizing authorization, bounding a trust boundary)."
+    },
+    "benefits": { "type": "array", "items": { "type": "string" } },
+    "costs": { "type": "array", "items": { "type": "string" } },
+    "risks": { "type": "array", "items": { "type": "string" } },
+    "complexity_introduced": { "type": "string", "enum": ["low", "medium", "high"] },
+    "phased_path": {
+      "type": "array",
+      "description": "Ordered migration steps. A recommendation with only one step ('migrate to X') is a red flag for an unjustified big-bang change unless the change is genuinely that small.",
+      "items": {
+        "type": "object",
+        "properties": {
+          "step": { "type": "integer" },
+          "description": { "type": "string" }
+        },
+        "required": ["step", "description"]
+      }
+    },
+    "related_findings": {
+      "type": "array",
+      "description": "SEC-NNN finding IDs whose root cause this recommendation would address -- informational cross-reference only. The recommendation is not a substitute for those findings' own remediation.",
+      "items": { "type": "string", "pattern": "^SEC-[0-9]{3,}$" }
+    }
+  },
+  "required": ["id", "title", "category", "priority", "assessed_problem", "recommendation", "rationale", "benefits", "costs", "phased_path"]
+}

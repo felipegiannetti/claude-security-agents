@@ -1,4 +1,4 @@
-# Stage 03: Attack Surface Mapping
+# Stage 04: Attack Surface Mapping
 
 ## Purpose
 
@@ -10,7 +10,7 @@ Identify every point where untrusted data can enter the system, and rank them by
 
 ## Inputs
 
-- The architecture model from `02_architecture_discovery` ([architecture.schema.json](../../schemas/architecture.schema.json)).
+- The architecture model from `03_architecture_mapping` ([architecture.schema.json](../../schemas/architecture.schema.json)).
 
 ## Process
 
@@ -26,4 +26,4 @@ Identify every point where untrusted data can enter the system, and rank them by
 ## Success Criteria
 
 - Every entry point in the architecture model is either represented here or explicitly excluded with a reason.
-- High-risk entry points (unauthenticated + sensitive operation) are clearly distinguishable from routine ones, so `05_llm_review` can prioritize its attention.
+- High-risk entry points (unauthenticated + sensitive operation) are clearly distinguishable from routine ones, so `06_llm_security_review` can prioritize its attention.

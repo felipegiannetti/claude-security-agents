@@ -1,6 +1,6 @@
 # Prioritization Prompt
 
-`09_prioritization` is a deterministic calculation ([calculate_priorities.py](../scripts/reporting/calculate_priorities.py) against [priority.config.yaml](../config/priority.config.yaml)), not an LLM judgment call — priority should be reproducible, not vibes-based. This prompt is for the narrow follow-up task of turning the computed score into a short, readable justification for the report.
+`11_security_prioritization` is a deterministic calculation ([calculate_priorities.py](../scripts/reporting/calculate_priorities.py) against [priority.config.yaml](../config/priority.config.yaml)), not an LLM judgment call — priority should be reproducible, not vibes-based. This prompt is for the narrow follow-up task of turning the computed score into a short, readable justification for the report.
 
 ---
 

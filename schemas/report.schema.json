@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://security-review-agent/schemas/report.schema.json",
   "title": "Final Security Report",
-  "description": "Output of 11_final_report. Structured contract behind the Markdown/JSON/SARIF renderers. See CLAUDE.md 'Final Security Report'.",
+  "description": "Output of 15_final_report. Structured contract behind the Markdown/JSON/SARIF renderers. Two axes: application_security (SEC-* vulnerabilities) and software_architecture (ARCH-* recommendations) -- kept structurally separate, never merged. See CLAUDE.md 'Final Security Report' and workflow/stages/15_final_report.md.",
   "type": "object",
   "properties": {
     "metadata": {
@@ -11,8 +11,12 @@
         "generated_at": { "type": "string", "format": "date-time" },
         "repository": { "type": "string" },
         "review_scope": { "type": "string", "enum": ["full-repository", "diff", "pull-request"] },
-        "pipeline_version": { "type": "string" }
+        "pipeline_version": { "type": "string" },
+        "dynamic_validation_performed": { "type": "boolean" }
       }
+    },
+    "software_context": {
+      "$ref": "software-context.schema.json"
     },
     "executive_summary": {
       "type": "object",
@@ -23,50 +27,104 @@
         "top_priorities": {
           "type": "array",
           "items": { "type": "string", "description": "SEC-NNN references, ordered." }
+        },
+        "top_architecture_recommendations": {
+          "type": "array",
+          "items": { "type": "string", "description": "ARCH-NNN references, ordered." }
         }
       },
       "required": ["overview", "overall_risk"]
     },
-    "finding_counts": {
+    "application_security": {
       "type": "object",
+      "description": "Axis 1: confirmed vulnerabilities.",
       "properties": {
-        "by_severity": {
+        "finding_counts": {
           "type": "object",
           "properties": {
-            "critical": { "type": "integer" },
-            "high": { "type": "integer" },
-            "medium": { "type": "integer" },
-            "low": { "type": "integer" },
-            "informational": { "type": "integer" }
+            "by_severity": {
+              "type": "object",
+              "properties": {
+                "critical": { "type": "integer" },
+                "high": { "type": "integer" },
+                "medium": { "type": "integer" },
+                "low": { "type": "integer" },
+                "informational": { "type": "integer" }
+              }
+            },
+            "by_priority": {
+              "type": "object",
+              "properties": {
+                "P0": { "type": "integer" },
+                "P1": { "type": "integer" },
+                "P2": { "type": "integer" },
+                "P3": { "type": "integer" },
+                "P4": { "type": "integer" }
+              }
+            },
+            "rejected_as_false_positive": { "type": "integer" }
           }
         },
-        "by_priority": {
+        "confirmed_findings": {
+          "type": "array",
+          "items": { "$ref": "finding.schema.json" }
+        },
+        "remediation_roadmap": {
           "type": "object",
           "properties": {
-            "P0": { "type": "integer" },
-            "P1": { "type": "integer" },
-            "P2": { "type": "integer" },
-            "P3": { "type": "integer" },
-            "P4": { "type": "integer" }
+            "immediate": { "type": "array", "items": { "type": "string" } },
+            "short_term": { "type": "array", "items": { "type": "string" } },
+            "medium_term": { "type": "array", "items": { "type": "string" } },
+            "hardening": { "type": "array", "items": { "type": "string" } }
+          }
+        }
+      },
+      "required": ["finding_counts", "confirmed_findings"]
+    },
+    "software_architecture": {
+      "type": "object",
+      "description": "Axis 2: structural assessment and recommendations. Never contains vulnerability findings -- see finding.schema.json for those.",
+      "properties": {
+        "current_state_summary": { "type": "string" },
+        "strengths": { "type": "array", "items": { "type": "string" } },
+        "structural_problems": { "type": "array", "items": { "type": "string" } },
+        "security_relevant_technical_debt": { "type": "array", "items": { "type": "string" } },
+        "recommendation_counts": {
+          "type": "object",
+          "properties": {
+            "ARCH-P0": { "type": "integer" },
+            "ARCH-P1": { "type": "integer" },
+            "ARCH-P2": { "type": "integer" },
+            "ARCH-P3": { "type": "integer" }
           }
         },
-        "rejected_as_false_positive": { "type": "integer" }
+        "recommendations": {
+          "type": "array",
+          "items": { "$ref": "architecture-recommendation.schema.json" }
+        },
+        "architecture_roadmap": {
+          "type": "object",
+          "properties": {
+            "phases": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "phase": { "type": "integer" },
+                  "description": { "type": "string" },
+                  "recommendation_ids": { "type": "array", "items": { "type": "string" } }
+                },
+                "required": ["phase", "description"]
+              }
+            }
+          }
+        }
       }
     },
-    "confirmed_findings": {
-      "type": "array",
-      "items": { "$ref": "finding.schema.json" }
-    },
-    "remediation_roadmap": {
-      "type": "object",
-      "properties": {
-        "immediate": { "type": "array", "items": { "type": "string" } },
-        "short_term": { "type": "array", "items": { "type": "string" } },
-        "medium_term": { "type": "array", "items": { "type": "string" } },
-        "hardening": { "type": "array", "items": { "type": "string" } }
-      }
-    },
-    "final_conclusion": { "type": "string" }
+    "final_conclusion": {
+      "type": "string",
+      "description": "Ties both axes together."
+    }
   },
-  "required": ["metadata", "executive_summary", "finding_counts", "confirmed_findings"]
+  "required": ["metadata", "executive_summary", "application_security"]
 }

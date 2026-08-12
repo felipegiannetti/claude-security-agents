@@ -1,4 +1,4 @@
-# Stage 07: Triage
+# Stage 08: Security Triage
 
 ## Purpose
 
@@ -11,14 +11,14 @@ Deterministically clean up the candidate finding set before it goes to independe
 
 ## Inputs
 
-- Candidate findings from `05_llm_review` / `06_data_flow_analysis`.
+- Candidate findings from `06_llm_security_review` / `07_data_flow_analysis`.
 - [config/severity.config.yaml](../../config/severity.config.yaml).
 
 ## Process
 
 1. Normalize all candidates to a single consistent shape ([finding.schema.json](../../schemas/finding.schema.json)).
 2. Deduplicate findings that share a root cause (e.g. the same missing validation helper flagged at five call sites) into one finding with multiple locations, rather than five separate findings.
-3. Assign preliminary severity per `config/severity.config.yaml`, based on CWE/category and technical impact — independent of the priority calculation, which happens later in `09_prioritization`.
+3. Assign preliminary severity per `config/severity.config.yaml`, based on CWE/category and technical impact — independent of the priority calculation, which happens later in `11_security_prioritization`.
 4. Advance status from `CANDIDATE` to `TRIAGED`.
 
 ## Outputs

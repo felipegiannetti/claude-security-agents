@@ -1,4 +1,4 @@
-# Stage 04: Static Scan
+# Stage 05: Static Security Scanning
 
 ## Purpose
 
@@ -17,7 +17,7 @@ All scanners run per `config/scanners.config.yaml`. None run in autofix mode —
 ## Inputs
 
 - The review scope from `01_intake`.
-- The architecture model from `02_architecture_discovery` (to select which scanners are relevant — e.g. skip a Python-specific scanner on a pure Node.js repo).
+- The architecture model from `03_architecture_mapping` (to select which scanners are relevant — e.g. skip a Python-specific scanner on a pure Node.js repo).
 
 ## Process
 
@@ -27,7 +27,7 @@ All scanners run per `config/scanners.config.yaml`. None run in autofix mode —
 
 ## Outputs
 
-- A normalized list of scan results, each still labeled as raw scanner evidence — not a candidate finding yet. Promotion to `CANDIDATE` happens in `05_llm_review`, where results are correlated with code and architectural context.
+- A normalized list of scan results, each still labeled as raw scanner evidence — not a candidate finding yet. Promotion to `CANDIDATE` happens in `06_llm_security_review`, where results are correlated with code and architectural context.
 
 ## Success Criteria
 

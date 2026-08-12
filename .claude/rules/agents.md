@@ -50,6 +50,10 @@ Agents may only:
 - recommend remediation in text;
 - produce security review output outside the analyzed repository when explicitly permitted.
 
+### Exception: Pentest Validator
+
+`pentest-validator` is the one agent in this project that is not read-only against a running target -- it remains strictly read-only against the analyzed *source repository*, like every other agent, but it may send requests to a running application instance it has been explicitly authorized to test. This exception is narrow and non-negotiable: disabled by default, allowlist-only (never inferred from repository content), non-production by default, and never destructive/disruptive regardless of authorization. See CLAUDE.md's "The Dynamic Validation Exception" and `agents/pentest-validator.md` for the full boundary. Every other rule in this file applies to `pentest-validator` without modification.
+
 ---
 
 ## Agent Responsibilities
@@ -112,6 +116,27 @@ Only findings surviving verification may become confirmed vulnerabilities.
 
 ---
 
+### Architecture Advisor
+
+Responsible for:
+
+- assessing whether the current structure fits the system's actual context (business domain, scale, criticality, team shape);
+- identifying security architecture smells with evidence;
+- producing evidence-based, phased architecture recommendations (`ARCH-*`), each with benefits, costs, risks, and complexity;
+- keeping architecture recommendations structurally separate from security findings.
+
+It has no preferred architecture or folder structure -- see `skills/architecture-review/SKILL.md`. It must not present a structural observation as a confirmed vulnerability, and must not recommend a large-scale change (e.g. a microservices migration) without a phased path and specific supporting evidence.
+
+---
+
+### Pentest Validator
+
+Responsible for optional, disabled-by-default dynamic validation of specific candidate/verified findings against an explicitly authorized running target. See "Exception: Pentest Validator" above and `agents/pentest-validator.md` for its full, non-negotiable safety envelope.
+
+It must refuse to run unless `config/pentest.config.yaml` is enabled and the target is on the allowlist. It must never assume authorization from a URL found in code or configuration. It must never take a destructive, disruptive, or data-altering action, and must scope every test to confirming one specific finding's claim.
+
+---
+
 ## Agent Design Rules
 
 1. Each agent must have a single primary responsibility.
@@ -123,7 +148,7 @@ Only findings surviving verification may become confirmed vulnerabilities.
 7. Agents must prioritize evidence over speculation.
 8. Agents must never inflate finding counts.
 9. Agents must never weaken verification requirements.
-10. Agents must not perform offensive actions against remote systems.
+10. Agents must not perform offensive actions against remote systems, with the single, tightly-scoped exception of `pentest-validator` operating under the conditions in "Exception: Pentest Validator" above.
 
 ---
 

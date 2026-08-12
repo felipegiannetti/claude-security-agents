@@ -7,7 +7,7 @@
   "properties": {
     "id": {
       "type": "string",
-      "description": "Stable identifier. Temporary during review (e.g. a UUID or scanner-provided id); assigned final SEC-NNN form at 11_final_report.",
+      "description": "Stable identifier. Temporary during review (e.g. a UUID or scanner-provided id); assigned final SEC-NNN form at 15_final_report.",
       "pattern": "^(SEC-[0-9]{3,}|[A-Za-z0-9._-]+)$"
     },
     "status": {
@@ -40,7 +40,7 @@
     "priority": {
       "type": "string",
       "enum": ["P0", "P1", "P2", "P3", "P4"],
-      "description": "Remediation urgency, assigned in 09_prioritization. See config/priority.config.yaml."
+      "description": "Remediation urgency, assigned in 11_security_prioritization. See config/priority.config.yaml."
     },
     "priority_factors": {
       "type": "object",
@@ -160,7 +160,7 @@
     },
     "verification": {
       "type": "object",
-      "description": "Populated by security-verifier during 08_verification.",
+      "description": "The 'Independent Verification' evidence layer, populated by security-verifier during 09_independent_verification. Kept separate from 'dynamic_validation' below -- static/independent-verification confidence and dynamic-validation confidence are never merged into one number.",
       "properties": {
         "attacker_control_confirmed": { "type": "boolean" },
         "reachability_confirmed": { "type": "boolean" },
@@ -171,6 +171,25 @@
         "verification_evidence": { "type": "array", "items": { "type": "string" } },
         "rejection_reason": { "type": "string" }
       }
+    },
+    "dynamic_validation": {
+      "type": "object",
+      "description": "The optional 'Dynamic Validation' evidence layer, populated by pentest-validator during 10_dynamic_pentest_validation -- only present when that stage ran (requires config/pentest.config.yaml to be enabled with an authorized target; see agents/pentest-validator.md). Absence of this field means dynamic validation was not attempted, not that it failed.",
+      "properties": {
+        "performed": { "type": "boolean" },
+        "target": { "type": "string", "description": "The authorized target tested against, per config/pentest.config.yaml." },
+        "authorization_reference": { "type": "string", "description": "Which allowlist entry authorized this test." },
+        "test_performed": { "type": "string", "description": "Exact, minimal test executed." },
+        "result": { "type": "string", "enum": ["confirmed", "not-reproduced", "inconclusive", "not-yet-implemented"] },
+        "observation": { "type": "string" },
+        "confidence_impact": { "type": "string", "description": "How this result changed the finding's confidence, and why." }
+      },
+      "required": ["performed"]
+    },
+    "related_architecture_recommendations": {
+      "type": "array",
+      "description": "ARCH-NNN recommendation IDs whose implementation would address this finding's structural root cause. Informational cross-reference only -- does not replace this finding's own remediation.",
+      "items": { "type": "string", "pattern": "^ARCH-[0-9]{3,}$" }
     },
     "false_positive_analysis": {
       "type": "object",

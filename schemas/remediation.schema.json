@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://security-review-agent/schemas/remediation.schema.json",
   "title": "Remediation",
-  "description": "Actionable, text-only remediation guidance for a CONFIRMED finding. Produced in 10_remediation_analysis. Never applied automatically -- see .claude/rules/security.md 'Absolute Read-Only Policy'.",
+  "description": "Actionable, text-only remediation guidance for a CONFIRMED finding. Produced in 14_remediation_analysis. Never applied automatically -- see .claude/rules/security.md 'Absolute Read-Only Policy'.",
   "type": "object",
   "properties": {
     "summary": {

@@ -1,33 +1,49 @@
 # Security review pipeline: ordered stages executed for a full review.
-# Each stage corresponds to a doc in workflow/stages/.
+# Each stage corresponds to a doc in workflow/stages/. Two axes converge here:
+# Application Security (vulnerability findings, SEC-*) and Software
+# Architecture (structural recommendations, ARCH-*) -- see 15_final_report.
 name: security-review-pipeline
-version: "0.1.0"
+version: "0.2.0"
 
 stages:
   - id: intake
     doc: stages/01_intake.md
-  - id: architecture_discovery
-    doc: stages/02_architecture_discovery.md
+  - id: software_context_discovery
+    doc: stages/02_software_context_discovery.md
+  - id: architecture_mapping
+    doc: stages/03_architecture_mapping.md
     agent: architecture-mapper
   - id: attack_surface_mapping
-    doc: stages/03_attack_surface_mapping.md
-  - id: static_scan
-    doc: stages/04_static_scan.md
-  - id: llm_review
-    doc: stages/05_llm_review.md
+    doc: stages/04_attack_surface_mapping.md
+  - id: static_security_scanning
+    doc: stages/05_static_security_scanning.md
+  - id: llm_security_review
+    doc: stages/06_llm_security_review.md
     agent: security-reviewer
   - id: data_flow_analysis
-    doc: stages/06_data_flow_analysis.md
-  - id: triage
-    doc: stages/07_triage.md
-  - id: verification
-    doc: stages/08_verification.md
+    doc: stages/07_data_flow_analysis.md
+  - id: security_triage
+    doc: stages/08_security_triage.md
+  - id: independent_verification
+    doc: stages/09_independent_verification.md
     agent: security-verifier
-  - id: prioritization
-    doc: stages/09_prioritization.md
+  - id: dynamic_pentest_validation
+    doc: stages/10_dynamic_pentest_validation.md
+    agent: pentest-validator
+    optional: true
+    enabled_by: config/pentest.config.yaml#enabled
+    requires_authorized_target: true
+  - id: security_prioritization
+    doc: stages/11_security_prioritization.md
+  - id: architecture_assessment
+    doc: stages/12_architecture_assessment.md
+    agent: architecture-advisor
+  - id: security_architecture_recommendations
+    doc: stages/13_security_architecture_recommendations.md
+    agent: architecture-advisor
   - id: remediation_analysis
-    doc: stages/10_remediation_analysis.md
+    doc: stages/14_remediation_analysis.md
   - id: final_report
-    doc: stages/11_final_report.md
+    doc: stages/15_final_report.md
 
 # TODO: define per-stage inputs/outputs and failure handling.

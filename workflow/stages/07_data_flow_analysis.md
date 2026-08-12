@@ -1,8 +1,8 @@
-# Stage 06: Data Flow Analysis
+# Stage 07: Data Flow Analysis
 
 ## Purpose
 
-Deepen the source-to-sink trace for candidate findings where `05_llm_review`'s initial pass left a step in the chain unconfirmed. This stage exists so that data-flow depth is a deliberate, checkable step in the pipeline rather than something that quietly varies with how thorough a single review pass happened to be.
+Deepen the source-to-sink trace for candidate findings where `06_llm_security_review`'s initial pass left a step in the chain unconfirmed. This stage exists so that data-flow depth is a deliberate, checkable step in the pipeline rather than something that quietly varies with how thorough a single review pass happened to be.
 
 ## Prompt
 
@@ -10,7 +10,7 @@ Deepen the source-to-sink trace for candidate findings where `05_llm_review`'s i
 
 ## Inputs
 
-- Candidate findings from `05_llm_review` whose `data_flow` field is incomplete or whose confidence is below `MEDIUM` due to an unconfirmed path step.
+- Candidate findings from `06_llm_security_review` whose `data_flow` field is incomplete or whose confidence is below `MEDIUM` due to an unconfirmed path step.
 
 ## Process
 
@@ -28,4 +28,4 @@ explicitly resolving the specific unconfirmed step — e.g. "is this validator a
 
 ## Success Criteria
 
-- No candidate finding reaches `07_triage` with a data-flow claim that hasn't been explicitly checked at least once.
+- No candidate finding reaches `08_security_triage` with a data-flow claim that hasn't been explicitly checked at least once.

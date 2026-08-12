@@ -6,8 +6,9 @@ version: "0.1.0"
 
 levels: [critical, high, medium, low, informational]
 
-# Base severity by category. This is a starting point for 07_triage, not a
-# final answer -- security-verifier may adjust it in 08_verification once the
+# Base severity by category. This is a starting point for 08_security_triage,
+# not a final answer -- security-verifier may adjust it in
+# 09_independent_verification once the
 # actual attack scenario is confirmed (see agents/security-verifier.md
 # "Severity Review").
 category_base_severity:

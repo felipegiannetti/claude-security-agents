@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://security-review-agent/schemas/scan-result.schema.json",
   "title": "Scan Result",
-  "description": "Normalized output of any deterministic scanner (stage 04_static_scan), before correlation into a candidate finding. This is evidence, not a conclusion -- see .claude/rules/security.md 'Scanner Trust Policy'.",
+  "description": "Normalized output of any deterministic scanner (stage 05_static_security_scanning), before correlation into a candidate finding. This is evidence, not a conclusion -- see .claude/rules/security.md 'Scanner Trust Policy'.",
   "type": "object",
   "properties": {
     "tool": {
@@ -27,7 +27,7 @@
     "kev": { "$ref": "finding.schema.json#/properties/kev" },
     "correlated": {
       "type": "boolean",
-      "description": "Set true once security-reviewer has correlated this result with code/architecture context in 05_llm_review."
+      "description": "Set true once security-reviewer has correlated this result with code/architecture context in 06_llm_security_review."
     },
     "promoted_finding_id": {
       "type": "string",
