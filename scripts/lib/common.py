@@ -57,6 +57,10 @@ def run_tool(args: list[str], timeout: int = 300, cwd: Optional[str] = None) -> 
             args,
             capture_output=True,
             text=True,
+            encoding="utf-8",
+            errors="replace",  # tool output (e.g. osv-scanner) can contain bytes invalid in
+                                # Windows' default console codepage (cp1252) -- decode as UTF-8
+                                # explicitly rather than crashing on a stray byte.
             timeout=timeout,
             cwd=cwd,
             check=False,

@@ -11,6 +11,7 @@ effort_levels: [trivial, small, medium, large]
 # a pattern repeated across 40 files after deduplication).
 category_default_effort:
   sql-injection: trivial              # parameterize the query / use ORM binding
+  command-injection: trivial          # switch to argument-array execution, no shell=True
   hardcoded-credential-live: trivial  # rotate + move to secret manager
   missing-security-headers: trivial
   open-redirect: trivial
@@ -19,12 +20,15 @@ category_default_effort:
   reflected-xss: small
   dom-xss: small
   csrf: small                         # enable framework CSRF middleware
+  insecure-jwt-verification: small     # pin the algorithm/key server-side
   path-traversal: small
   broken-object-level-authorization: medium   # add ownership/tenant check
   broken-function-level-authorization: medium
   mass-assignment: medium
   excessive-data-exposure: medium
   ssrf: medium                        # allowlist + network egress control
+  unrestricted-file-upload: medium     # content-based validation + move storage off any web-servable path
+  race-condition: medium               # make the check-and-act sequence atomic
   stored-xss: medium
   nosql-injection: medium
   ldap-injection: medium
@@ -34,6 +38,15 @@ category_default_effort:
   authentication-bypass: large        # often needs a design-level fix
   remote-code-execution: large
   rate-limiting-missing: large        # infra/gateway-level change in most stacks
+  insufficient-security-logging: small          # add missing log calls at identified call sites
+  sensitive-data-exposure-in-logs: trivial      # remove/mask the offending field from the log call
+  missing-audit-trail: medium                   # append-only audit write path + dual-identity impersonation logging is a design-level change
+  insufficient-error-correlation: small         # add/propagate a correlation ID through the error-handling middleware
+  dormant-account-abuse: medium                 # inactivity tracking + enforced grant expiration touches the authorization data model
+  oauth-account-linking-flaw: small              # add an email_verified (or equivalent) check before treating an IdP claim as authoritative
+  missing-brute-force-protection: small          # add attempt counting + progressive lockout/CAPTCHA to the auth flow
+  weak-tls-configuration: small                  # update TLS version floor / cipher suite configuration
+  certificate-validation-disabled: trivial       # remove the insecure verification override
 
 # Framework-aware guidance hints consumed by prompts/remediation_prompt.md so
 # recommendations aren't generic. Extend as knowledge/frameworks/ grows.

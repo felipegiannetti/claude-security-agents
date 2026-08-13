@@ -6,7 +6,7 @@ against the CISA Known Exploited Vulnerabilities (KEV) catalog, and tags each
 match with real-world exploitation evidence. This is enrichment, not a new
 finding source: it never invents a vulnerability, it only adds an
 "actively exploited in the wild" signal that the prioritization stage uses to
-override pure-CVSS scoring (see workflow/stages/09_prioritization.md and
+override pure-CVSS scoring (see workflow/stages/11_security_prioritization.md and
 skills/dependency-cve-check/references/kev-correlation.md).
 
 Usage:

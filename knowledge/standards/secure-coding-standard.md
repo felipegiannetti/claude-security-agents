@@ -31,3 +31,5 @@ Credentials, API keys, and private keys belong in a secret manager or environmen
 ## Errors Don't Leak Internals
 
 Error responses to untrusted callers should not include stack traces, internal file paths, query fragments, or dependency version strings that aid reconnaissance — log the detail server-side, return a generic message externally.
+
+When recommending an application-facing error message (in remediation guidance, or when a finding's fix involves changing what an error response reveals), prefer a structured, three-part pattern over a bare generic string: **Error Detected** (what failed, in user-facing terms) + **Probable Cause** (a category, not internal detail -- e.g. "invalid input format", not the regex that rejected it) + **Suggested Action** (what the caller should do next). This gives callers and support teams enough to act on without leaking internals a generic "An error occurred" would also hide -- it is a usability improvement over a bare generic string, not a security control on its own, and never a substitute for the fail-closed and no-internal-detail rules above.

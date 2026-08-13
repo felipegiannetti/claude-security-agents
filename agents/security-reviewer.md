@@ -45,7 +45,7 @@ Do not start vulnerability analysis without the architecture model. A finding pr
 
 Do not embed vulnerability methodology here — load it from [skills/](../skills). Use [workflow/routing_rules.yaml](../workflow/routing_rules.yaml) to decide which Skills apply to the current scope, based on languages, frameworks, and file patterns from the architecture model. `secure-code-review` and `secrets-detection` always run. Consult each selected Skill's `references/` material for domain-specific evidence requirements and false-positive conditions — do not rely on general knowledge in place of the Skill's specific guidance.
 
-Skills currently available: `secure-code-review`, `auth-authz-review`, `injection-review`, `web-security-review`, `api-security-review`, `file-security-review`, `secrets-detection`, `dependency-cve-check`, `business-logic-review`, `cryptography-review`, `iac-misconfig-review`.
+Skills currently available: `secure-code-review`, `auth-authz-review`, `injection-review`, `web-security-review`, `api-security-review`, `file-security-review`, `secrets-detection`, `dependency-cve-check`, `business-logic-review`, `cryptography-review`, `iac-misconfig-review`, `logging-audit-review`.
 
 ---
 

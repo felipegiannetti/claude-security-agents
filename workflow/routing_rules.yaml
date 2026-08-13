@@ -77,11 +77,11 @@ rules:
 
   - when:
       path_glob: "**/*auth*/**"
-    use_skills: [auth-authz-review]
+    use_skills: [auth-authz-review, logging-audit-review]
 
   - when:
       path_glob: "**/*session*/**"
-    use_skills: [auth-authz-review]
+    use_skills: [auth-authz-review, logging-audit-review]
 
   - when:
       path_glob: "**/*payment*/**"
@@ -215,7 +215,7 @@ rules:
 
   - when:
       entry_point_type: admin-interface
-    use_skills: [auth-authz-review, api-security-review]
+    use_skills: [auth-authz-review, api-security-review, logging-audit-review]
 
   - when:
       entry_point_type: websocket

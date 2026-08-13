@@ -12,7 +12,7 @@
     "title": { "type": "string" },
     "category": {
       "type": "string",
-      "enum": ["layering", "module-boundaries", "monolith-vs-services", "authorization-centralization", "data-access-boundary", "integration-gateway", "secrets-handling", "trust-boundary-definition", "other"]
+      "enum": ["layering", "module-boundaries", "monolith-vs-services", "authorization-centralization", "data-access-boundary", "integration-gateway", "secrets-handling", "trust-boundary-definition", "api-documentation-staleness", "other"]
     },
     "priority": {
       "type": "string",

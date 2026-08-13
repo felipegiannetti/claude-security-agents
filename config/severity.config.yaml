@@ -17,6 +17,7 @@ category_base_severity:
   code-injection: critical
   remote-code-execution: critical
   authentication-bypass: critical
+  insecure-jwt-verification: critical
   hardcoded-credential-live: critical
   ssrf: high
   broken-object-level-authorization: high
@@ -41,6 +42,17 @@ category_base_severity:
   hardcoded-credential-placeholder: informational
   iac-misconfiguration: medium
   vulnerable-dependency: medium # further adjusted by CVSS + KEV in scan correlation
+  unrestricted-file-upload: critical # assume RCE-capable until verified otherwise -- see skills/file-security-review/references/file-upload.md
+  race-condition: high # escalate to critical if verified financial/irreversible impact -- see skills/business-logic-review/references/race-conditions.md
+  insufficient-security-logging: medium        # see skills/logging-audit-review/references/insufficient-logging.md
+  sensitive-data-exposure-in-logs: high        # credentials/tokens in plaintext logs -- see skills/logging-audit-review/references/sensitive-data-in-logs.md
+  missing-audit-trail: medium                  # escalate to high for unaudited impersonation/"login as" -- see skills/logging-audit-review/references/audit-trail-integrity.md
+  insufficient-error-correlation: low           # see skills/logging-audit-review/references/error-correlation.md
+  dormant-account-abuse: medium                # escalate to high for broad privileges -- see skills/auth-authz-review/references/dormant-account-lifecycle.md
+  oauth-account-linking-flaw: critical          # automatic linking on unverified email is a direct account-takeover path -- see skills/auth-authz-review/references/oauth-account-linking.md
+  missing-brute-force-protection: high          # see skills/auth-authz-review/references/brute-force-protection.md
+  weak-tls-configuration: medium                # see skills/web-security-review/references/tls-configuration.md
+  certificate-validation-disabled: high         # escalate toward critical for credentials/PII/financial data on the connection -- see skills/web-security-review/references/tls-configuration.md
 
 # Impact modifiers applied on top of the category base. A modifier can only
 # raise severity, never silently lower it below the category base -- lowering

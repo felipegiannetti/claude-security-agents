@@ -24,4 +24,14 @@ cisa_kev:
   cache_ttl_hours: 24
   offline: false  # if true, never hit the network; use cache_path only
 
+# Flags CVEs above a severity threshold disclosed within a recency window,
+# independent of CISA KEV listing (that catalog only covers *confirmed*
+# active exploitation, a narrow subset of what's worth proactive attention).
+# See scripts/scanners/check_cve_policy.py and
+# skills/dependency-cve-check/references/cve-policy.md.
+cve_policy:
+  enabled: true
+  min_severity: medium  # low|medium|high|critical
+  max_age_days: 365     # only flag CVEs first published within this window
+
 # TODO: per-scanner rule sets, severity thresholds, timeouts.

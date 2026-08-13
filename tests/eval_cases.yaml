@@ -104,3 +104,11 @@ cases:
     skill: business-logic-review
     reference: skills/business-logic-review/references/race-conditions.md
     scanner: null  # race conditions are never scanner-detectable -- inherently a concurrency/logic reasoning task
+
+  - id: logging-001
+    category: sensitive-data-exposure-in-logs
+    vulnerable_path: fixtures/logging/vulnerable/app.py
+    safe_path: fixtures/logging/safe/app.py
+    skill: logging-audit-review
+    reference: skills/logging-audit-review/references/sensitive-data-in-logs.md
+    scanner: null  # "is this a full-object dump vs. an explicit allowlist" needs semantic reasoning, not a safe generic-ruleset bet

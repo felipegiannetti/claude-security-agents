@@ -60,3 +60,8 @@ false_positives:
     category: race-condition
     location_file: fixtures/business-logic/safe/app.py
     why_safe: "mark_coupon_used_if_unused performs check-and-act as a single atomic operation -- see skills/business-logic-review/references/race-conditions.md"
+
+  logging-001:
+    category: sensitive-data-exposure-in-logs
+    location_file: fixtures/logging/safe/app.py
+    why_safe: "log call explicitly allowlists username and outcome, never the password field or raw request body -- see skills/logging-audit-review/references/sensitive-data-in-logs.md"

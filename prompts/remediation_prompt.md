@@ -13,6 +13,7 @@ Cover:
 - **Summary** — one or two sentences on what to do.
 - **Explanation** — what's vulnerable and why, framed for someone about to fix it (not a restatement of the exploitation scenario).
 - **Fix guidance** — specific and framework-aware. Use [remediation.config.yaml](../config/remediation.config.yaml) `framework_hints` where a category match exists; do not give generic "validate your input" advice when a specific mechanism (e.g. "use this ORM's parameterized query builder") is knowable from the architecture model.
+- **User-facing error message changes** — when the fix involves what an error response reveals to a caller, apply the Error Detected / Probable Cause / Suggested Action pattern from [secure-coding-standard.md](../knowledge/standards/secure-coding-standard.md) Errors Don't Leak Internals, rather than proposing a bare generic string.
 - **Example code** (optional) — illustrative before/after snippets, clearly labeled as informational only.
 - **Effort** — one of `trivial` / `small` / `medium` / `large`, starting from `config/remediation.config.yaml` → `category_default_effort` and adjusted for the finding's actual scope (e.g. deduplicated across many call sites raises effort).
 - **Verification steps** — concrete: a specific test to add, a manual repro to re-attempt, or a scanner re-run that should come back clean.

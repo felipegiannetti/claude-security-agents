@@ -179,10 +179,18 @@
         "performed": { "type": "boolean" },
         "target": { "type": "string", "description": "The authorized target tested against, per config/pentest.config.yaml." },
         "authorization_reference": { "type": "string", "description": "Which allowlist entry authorized this test." },
-        "test_performed": { "type": "string", "description": "Exact, minimal test executed." },
-        "result": { "type": "string", "enum": ["confirmed", "not-reproduced", "inconclusive", "not-yet-implemented"] },
+        "test_performed": { "type": "string", "description": "Exact, minimal test executed, or null if not performed." },
+        "result": {
+          "type": "string",
+          "enum": ["confirmed", "not-reproduced", "inconclusive", "manual-required", "not-performed"],
+          "description": "'manual-required': confirming this finding needs a mutating HTTP method, which scripts/pentest/validate_finding.py never issues automatically -- see manual_validation_report. 'not-performed': a config/authorization gate blocked automated validation entirely (disabled, target not authorized, category not eligible, budget exceeded)."
+        },
         "observation": { "type": "string" },
-        "confidence_impact": { "type": "string", "description": "How this result changed the finding's confidence, and why." }
+        "confidence_impact": { "type": "string", "description": "How this result changed the finding's confidence, and why." },
+        "manual_validation_report": {
+          "type": "string",
+          "description": "Path to the generated Markdown report (scripts/pentest/generate_manual_validation_report.py) a human should follow, when result is 'manual-required'."
+        }
       },
       "required": ["performed"]
     },

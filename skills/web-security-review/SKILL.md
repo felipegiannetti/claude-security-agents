@@ -14,6 +14,7 @@ Builds on [secure-code-review](../secure-code-review/SKILL.md).
 - [Open Redirect](references/open-redirect.md)
 - [Clickjacking](references/clickjacking.md)
 - [Security Headers](references/security-headers.md)
+- [TLS Configuration](references/tls-configuration.md)
 
 ## When to Use
 
@@ -26,4 +27,4 @@ Whenever the attack surface map includes browser-facing entry points (HTML rende
 
 ## Output
 
-A candidate finding conforming to [finding.schema.json](../../schemas/finding.schema.json). Common categories: `stored-xss`, `reflected-xss`, `dom-xss`, `csrf`, `ssrf`, `open-redirect`, `clickjacking`, `cors-misconfiguration`, `missing-security-headers`.
+A candidate finding conforming to [finding.schema.json](../../schemas/finding.schema.json). Common categories: `stored-xss`, `reflected-xss`, `dom-xss`, `csrf`, `ssrf`, `open-redirect`, `clickjacking`, `cors-misconfiguration`, `missing-security-headers`, `weak-tls-configuration`, `certificate-validation-disabled`.

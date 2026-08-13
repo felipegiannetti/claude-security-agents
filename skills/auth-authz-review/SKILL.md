@@ -1,4 +1,4 @@
----
+﻿---
 name: auth-authz-review
 description: Reviews authentication and authorization logic - JWT handling, OAuth/OIDC flows, session management, password reset, MFA, and access control. Use when code touches login, tokens, sessions, or permission checks.
 ---
@@ -13,6 +13,9 @@ Builds on [secure-code-review](../secure-code-review/SKILL.md). Authentication (
 - [Password Reset](references/password-reset.md)
 - [MFA](references/mfa.md)
 - [Access Control](references/access-control.md)
+- [Dormant Account Lifecycle](references/dormant-account-lifecycle.md)
+- [OAuth Account Linking](references/oauth-account-linking.md)
+- [Brute-Force Protection](references/brute-force-protection.md)
 
 ## When to Use
 
@@ -26,4 +29,4 @@ Whenever the architecture model identifies an authentication mechanism, or the a
 
 ## Output
 
-A candidate finding conforming to [finding.schema.json](../../schemas/finding.schema.json). Common categories: `authentication-bypass`, `broken-object-level-authorization`, `broken-function-level-authorization`, `session-fixation`, `insecure-token-handling`.
+A candidate finding conforming to [finding.schema.json](../../schemas/finding.schema.json). Common categories: `authentication-bypass`, `broken-object-level-authorization`, `broken-function-level-authorization`, `session-fixation`, `insecure-token-handling`, `dormant-account-abuse`, `oauth-account-linking-flaw`, `missing-brute-force-protection`.

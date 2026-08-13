@@ -80,3 +80,10 @@ findings:
     min_severity: high
     location_file: fixtures/business-logic/vulnerable/app.py
     location_function: redeem_coupon
+
+  logging-001:
+    category: sensitive-data-exposure-in-logs
+    cwe: CWE-532
+    min_severity: high
+    location_file: fixtures/logging/vulnerable/app.py
+    location_function: handle_login

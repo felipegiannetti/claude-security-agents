@@ -45,5 +45,14 @@
   "iac-misconfiguration": "CWE-16",
   "information-exposure": "CWE-200",
   "tenant-isolation-failure": "CWE-668",
-  "xxe": "CWE-611"
+  "xxe": "CWE-611",
+  "insufficient-security-logging": "CWE-778",
+  "sensitive-data-exposure-in-logs": "CWE-532",
+  "missing-audit-trail": "CWE-778",
+  "insufficient-error-correlation": "CWE-390",
+  "dormant-account-abuse": "CWE-613",
+  "oauth-account-linking-flaw": "CWE-287",
+  "missing-brute-force-protection": "CWE-307",
+  "weak-tls-configuration": "CWE-326",
+  "certificate-validation-disabled": "CWE-295"
 }
