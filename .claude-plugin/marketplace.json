@@ -1,6 +1,7 @@
 {
   "$schema": "https://code.claude.com/schemas/marketplace.schema.json",
   "name": "security-review-agent",
+  "description": "Self-hosted marketplace for the Security Review Agent plugin -- a read-only, AI-assisted application security review system for Claude Code.",
   "owner": {
     "name": "Felipe Giannetti Fontenelle",
     "email": "felipegiannettifontenelle@gmail.com",
