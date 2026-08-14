@@ -67,5 +67,7 @@ impact_floors:
     pii: high
     health-data: high
 
-# TODO: precise CVSS score range -> severity mapping for dependency findings,
-# once scripts/scanners/run_osv_scanner.py output shape is finalized.
+# CVSS score/severity mapping for dependency findings is handled separately
+# by scripts/scanners/check_cve_policy.py (severity-rating computation) and
+# scripts/scanners/check_kev.py (exploitation-status priority floor) -- see
+# skills/dependency-cve-check/references/cve-policy.md and kev-correlation.md.

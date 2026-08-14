@@ -1,14 +1,9 @@
 {
   "$schema": "https://json.schemastore.org/claude-code-plugin-manifest.json",
-
   "name": "security-review-agent",
-
   "displayName": "Security Review Agent",
-
   "version": "0.1.0",
-
   "description": "Read-only AI-assisted application security review plugin for Claude Code. Analyzes source code, architecture, dependencies, configuration and security controls to identify, verify, prioritize and document security vulnerabilities without modifying the analyzed project.",
-
   "keywords": [
     "security",
     "cybersecurity",
@@ -21,6 +16,13 @@
     "vulnerability-analysis",
     "read-only"
   ],
-
-  "hooks": "./hooks/hooks.json"
+  "hooks": "./hooks/hooks.json",
+  "author": {
+    "name": "Felipe Giannetti Fontenelle",
+    "email": "felipegiannettifontenelle@gmail.com",
+    "url": "https://www.linkedin.com/in/felipe-giannetti-fontenelle-095501312/"
+  },
+  "repository": "https://github.com/felipegiannetti/claude-security-agents",
+  "homepage": "https://github.com/felipegiannetti/claude-security-agents#readme",
+  "license": "MIT"
 }

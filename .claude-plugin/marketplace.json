@@ -1,0 +1,37 @@
+{
+  "$schema": "https://code.claude.com/schemas/marketplace.schema.json",
+  "name": "security-review-agent",
+  "owner": {
+    "name": "Felipe Giannetti Fontenelle",
+    "email": "felipegiannettifontenelle@gmail.com",
+    "url": "https://github.com/felipegiannetti"
+  },
+  "plugins": [
+    {
+      "name": "security-review-agent",
+      "source": "./",
+      "displayName": "Security Review Agent",
+      "description": "Read-only AI-assisted application security review plugin for Claude Code. Analyzes source code, architecture, dependencies, configuration and security controls to identify, verify, prioritize and document security vulnerabilities without modifying the analyzed project.",
+      "version": "0.1.0",
+      "author": {
+        "name": "Felipe Giannetti Fontenelle",
+        "email": "felipegiannettifontenelle@gmail.com",
+        "url": "https://www.linkedin.com/in/felipe-giannetti-fontenelle-095501312/"
+      },
+      "repository": "https://github.com/felipegiannetti/claude-security-agents",
+      "keywords": [
+        "security",
+        "cybersecurity",
+        "appsec",
+        "code-review",
+        "security-review",
+        "sast",
+        "owasp",
+        "cwe",
+        "vulnerability-analysis",
+        "read-only"
+      ],
+      "category": "security"
+    }
+  ]
+}

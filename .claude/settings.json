@@ -66,7 +66,58 @@
 
       "Bash(gh pr merge *)",
       "Bash(gh pr create *)",
-      "Bash(gh release create *)"
+      "Bash(gh release create *)",
+
+      "PowerShell(git add *)",
+      "PowerShell(git commit *)",
+      "PowerShell(git push *)",
+      "PowerShell(git reset *)",
+      "PowerShell(git restore *)",
+      "PowerShell(git checkout *)",
+      "PowerShell(git switch *)",
+      "PowerShell(git clean *)",
+
+      "PowerShell(Remove-Item *)",
+      "PowerShell(ri *)",
+      "PowerShell(del *)",
+      "PowerShell(Move-Item *)",
+      "PowerShell(Copy-Item *)",
+      "PowerShell(New-Item *)",
+      "PowerShell(Set-Content *)",
+      "PowerShell(Add-Content *)",
+      "PowerShell(Out-File *)",
+
+      "PowerShell(npm install *)",
+      "PowerShell(npm uninstall *)",
+      "PowerShell(npm update *)",
+
+      "PowerShell(yarn add *)",
+      "PowerShell(yarn remove *)",
+
+      "PowerShell(pnpm add *)",
+      "PowerShell(pnpm remove *)",
+
+      "PowerShell(pip install *)",
+      "PowerShell(pip uninstall *)",
+
+      "PowerShell(poetry add *)",
+      "PowerShell(poetry remove *)",
+
+      "PowerShell(docker build *)",
+      "PowerShell(docker push *)",
+
+      "PowerShell(kubectl apply *)",
+      "PowerShell(kubectl create *)",
+      "PowerShell(kubectl delete *)",
+      "PowerShell(kubectl edit *)",
+      "PowerShell(kubectl patch *)",
+
+      "PowerShell(terraform apply *)",
+      "PowerShell(terraform destroy *)",
+
+      "PowerShell(gh pr merge *)",
+      "PowerShell(gh pr create *)",
+      "PowerShell(gh release create *)"
     ]
   },
 

@@ -46,4 +46,6 @@ stages:
   - id: final_report
     doc: stages/15_final_report.md
 
-# TODO: define per-stage inputs/outputs and failure handling.
+# Per-stage inputs/outputs/failure-handling are documented individually in
+# each workflow/stages/*.md file (see each stage's own Inputs/Outputs/Success
+# Criteria sections) rather than duplicated here.
