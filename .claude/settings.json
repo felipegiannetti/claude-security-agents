@@ -117,7 +117,12 @@
 
       "PowerShell(gh pr merge *)",
       "PowerShell(gh pr create *)",
-      "PowerShell(gh release create *)"
+      "PowerShell(gh release create *)",
+
+      "PowerShell(npx * --fix *)",
+      "PowerShell(mvn versions:*)",
+      "PowerShell(gradle * --write-*)",
+      "PowerShell(semgrep * --autofix *)"
     ]
   },
 

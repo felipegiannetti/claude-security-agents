@@ -17,9 +17,22 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "lib"))
 import common  # noqa: E402
 
 
+def normalize_cwe(cwe) -> "str | None":
+    """A rule's cwe metadata is sometimes a single string and sometimes a
+    list of strings -- iterating a bare string with next(iter(...)) silently
+    returns just its first character instead of the full identifier, so
+    each shape needs its own explicit handling rather than one code path
+    assuming a list."""
+    if isinstance(cwe, str):
+        return cwe
+    if isinstance(cwe, list) and cwe:
+        return cwe[0]
+    return None
+
+
 def normalize(raw: dict) -> list[dict]:
     results = []
-    for r in raw.get("results", []):
+    for r in raw.get("results") or []:
         start = r.get("start", {})
         end = r.get("end", {})
         extra = r.get("extra", {})
@@ -32,7 +45,7 @@ def normalize(raw: dict) -> list[dict]:
             "line_start": start.get("line"),
             "line_end": end.get("line"),
             "snippet": extra.get("lines"),
-            "cwe": next(iter(extra.get("metadata", {}).get("cwe", [])), None),
+            "cwe": normalize_cwe((extra.get("metadata") or {}).get("cwe")),
             "correlated": False,
             "raw_output": r,
         })

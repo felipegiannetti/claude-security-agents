@@ -66,7 +66,7 @@ def score_finding(finding: dict, weights: dict) -> tuple[int, dict]:
     applied["exposure"] = {key: delta}
 
     priv_weights = weights.get("privileges_required", {})
-    priv = prereqs.get("privileges_required", "user")
+    priv = prereqs.get("privileges_required") or "user"
     priv_key = "none" if priv == "none" else ("user" if priv == "user" else "privileged_or_admin")
     delta = priv_weights.get(priv_key, 0)
     score += delta

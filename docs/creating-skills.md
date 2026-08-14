@@ -1,6 +1,6 @@
 # Creating a New Skill
 
-Follow this when adding coverage for a vulnerability category or domain the existing 12 Skills don't cover well.
+Follow this when adding coverage for a vulnerability category or domain the existing 13 Skills don't cover well.
 
 ## 1. Confirm It's Actually a New Skill
 

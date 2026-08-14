@@ -38,6 +38,11 @@ category_default_effort:
   authentication-bypass: large        # often needs a design-level fix
   remote-code-execution: large
   rate-limiting-missing: large        # infra/gateway-level change in most stacks
+  code-injection: trivial              # switch to a safe parser/coercion, same discipline as command-injection
+  xxe: trivial                         # disable external entity resolution in the XML parser
+  clickjacking: trivial                # add X-Frame-Options / frame-ancestors
+  hardcoded-credential-placeholder: trivial  # remove the placeholder, confirm no real value ever replaced it
+  insecure-token-handling: small        # scope/rotate/store the token correctly per the specific handling gap
   insufficient-security-logging: small          # add missing log calls at identified call sites
   sensitive-data-exposure-in-logs: trivial      # remove/mask the offending field from the log call
   missing-audit-trail: medium                   # append-only audit write path + dual-identity impersonation logging is a design-level change

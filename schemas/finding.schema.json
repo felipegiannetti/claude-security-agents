@@ -149,13 +149,33 @@
       "properties": {
         "listed": { "type": ["boolean", "null"] },
         "lookup_status": { "type": "string", "enum": ["live", "cache", "stale-cache", "unavailable"] },
-        "vendor_project": { "type": "string" },
-        "product": { "type": "string" },
-        "vulnerability_name": { "type": "string" },
-        "date_added": { "type": "string", "format": "date" },
-        "due_date": { "type": "string", "format": "date" },
-        "known_ransomware_campaign_use": { "type": "string" },
-        "required_action": { "type": "string" }
+        "vendor_project": { "type": ["string", "null"] },
+        "product": { "type": ["string", "null"] },
+        "vulnerability_name": { "type": ["string", "null"] },
+        "date_added": { "type": ["string", "null"], "format": "date" },
+        "due_date": { "type": ["string", "null"], "format": "date" },
+        "known_ransomware_campaign_use": { "type": ["string", "null"] },
+        "required_action": { "type": ["string", "null"] }
+      }
+    },
+    "cve_policy": {
+      "type": "object",
+      "description": "CVE age/severity policy correlation for dependency findings, independent of KEV listing. See scripts/scanners/check_cve_policy.py and skills/dependency-cve-check/references/cve-policy.md.",
+      "properties": {
+        "flagged": { "type": "boolean" },
+        "reason": { "type": "string", "description": "Set instead of the scoring fields below when severity or the publish date could not be determined -- never treat a missing reason plus flagged:false as a confirmed below-threshold result without checking this field." },
+        "severity_rating": { "type": "string", "enum": ["low", "medium", "high", "critical"] },
+        "cvss_score": { "type": ["number", "null"] },
+        "cvss_vector": { "type": ["string", "null"] },
+        "published": { "type": ["string", "null"], "format": "date-time" },
+        "age_days": { "type": "integer" },
+        "policy": {
+          "type": "object",
+          "properties": {
+            "min_severity": { "type": "string", "enum": ["low", "medium", "high", "critical"] },
+            "max_age_days": { "type": "integer" }
+          }
+        }
       }
     },
     "verification": {

@@ -54,5 +54,10 @@
   "oauth-account-linking-flaw": "CWE-287",
   "missing-brute-force-protection": "CWE-307",
   "weak-tls-configuration": "CWE-326",
-  "certificate-validation-disabled": "CWE-295"
+  "certificate-validation-disabled": "CWE-295",
+  "authentication-bypass": "CWE-287",
+  "remote-code-execution": "CWE-94",
+  "hardcoded-credential-placeholder": "CWE-798",
+  "session-fixation": "CWE-384",
+  "insecure-token-handling": "CWE-287"
 }

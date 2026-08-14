@@ -53,6 +53,7 @@ category_base_severity:
   missing-brute-force-protection: high          # see skills/auth-authz-review/references/brute-force-protection.md
   weak-tls-configuration: medium                # see skills/web-security-review/references/tls-configuration.md
   certificate-validation-disabled: high         # escalate toward critical for credentials/PII/financial data on the connection -- see skills/web-security-review/references/tls-configuration.md
+  insecure-token-handling: high                # scope, expiration, storage, or transmission gap on an auth/session token -- see skills/auth-authz-review/
 
 # Impact modifiers applied on top of the category base. A modifier can only
 # raise severity, never silently lower it below the category base -- lowering

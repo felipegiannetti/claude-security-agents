@@ -19,7 +19,7 @@ import common  # noqa: E402
 
 def normalize(raw: dict) -> list[dict]:
     results = []
-    for target in raw.get("Results", []):
+    for target in raw.get("Results") or []:
         file_path = target.get("Target")
 
         for v in target.get("Vulnerabilities", []) or []:
