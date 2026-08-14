@@ -26,9 +26,14 @@ For each finding, produce:
 6. Estimated remediation effort (`trivial` / `small` / `medium` / `large` per [remediation-effort-matrix.yaml](../../knowledge/standards/remediation-effort-matrix.yaml)).
 7. Verification steps the team can use to confirm the fix actually closes the gap.
 
+## Framework Alignment (deterministic, optional)
+
+Run [scripts/reporting/map_compliance.py](../../scripts/reporting/map_compliance.py) over the confirmed findings to attach MITRE ATT&CK technique(s) and NIST CSF 2.0 / ISO 27001 control alignment where a mapping exists -- see [knowledge/mitre/attack-overview.md](../../knowledge/mitre/attack-overview.md) and [knowledge/compliance/compliance-overview.md](../../knowledge/compliance/compliance-overview.md). This is a deterministic lookup, never LLM-generated (a hallucinated technique or control ID is worse than an absent one), and it is additive context only -- it never changes a finding's severity or priority. Controlled by [config/compliance.config.yaml](../../config/compliance.config.yaml); a category with no mapping entry gets no field, not a guess.
+
 ## Outputs
 
 - Each finding annotated with a remediation record conforming to [remediation.schema.json](../../schemas/remediation.schema.json).
+- Where a mapping exists, `mitre_attack` and/or `compliance_mappings` per [finding.schema.json](../../schemas/finding.schema.json).
 
 ## Success Criteria
 

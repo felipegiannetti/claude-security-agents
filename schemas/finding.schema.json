@@ -158,6 +158,50 @@
         "required_action": { "type": ["string", "null"] }
       }
     },
+    "mitre_attack": {
+      "type": "object",
+      "description": "MITRE ATT&CK technique(s) relevant to this finding, populated deterministically by scripts/reporting/map_compliance.py from knowledge/mitre/attack-mapping.json. Absent field means not yet mapped, never that the finding has no attacker relevance -- see knowledge/mitre/attack-overview.md.",
+      "properties": {
+        "techniques": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": { "type": "string" },
+              "name": { "type": "string" },
+              "tactic": { "type": "string" }
+            }
+          }
+        },
+        "note": { "type": "string" }
+      }
+    },
+    "compliance_mappings": {
+      "type": "object",
+      "description": "NIST CSF 2.0 and ISO/IEC 27001:2022 Annex A control alignment, populated deterministically by scripts/reporting/map_compliance.py. Additive context only -- never affects severity or priority. See knowledge/compliance/compliance-overview.md, including its confidence caveat.",
+      "properties": {
+        "nist_csf": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": { "type": "string" },
+              "name": { "type": "string" }
+            }
+          }
+        },
+        "iso27001": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": { "type": "string" },
+              "subject": { "type": "string" }
+            }
+          }
+        }
+      }
+    },
     "cve_policy": {
       "type": "object",
       "description": "CVE age/severity policy correlation for dependency findings, independent of KEV listing. See scripts/scanners/check_cve_policy.py and skills/dependency-cve-check/references/cve-policy.md.",

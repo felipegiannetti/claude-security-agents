@@ -115,10 +115,14 @@ Examples:
 
 - OWASP references
 - CWE mappings
+- MITRE ATT&CK technique alignment
+- NIST CSF 2.0 and ISO 27001 compliance-framework alignment
 - severity criteria
 - priority criteria
 - remediation criteria
 - framework-specific security guidance
+
+Framework and compliance alignment (MITRE ATT&CK, NIST, ISO 27001) is additive context for the reader -- it is populated by deterministic lookup (see scripts/reporting/map_compliance.py), never by an LLM recalling a technique or control ID from memory, and it never changes a finding's severity or priority. A category with no confirmed mapping gets no field for that framework, never a guessed one.
 
 Do not duplicate shared knowledge across multiple Skills.
 

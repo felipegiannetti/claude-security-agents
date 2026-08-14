@@ -9,9 +9,9 @@ See [CLAUDE.md](CLAUDE.md) for the full architecture and design principles. Quic
 | [`agents/`](agents) | 5 agents: architecture-mapper, security-reviewer, security-verifier, architecture-advisor, pentest-validator (disabled by default) |
 | [`skills/`](skills) | 13 reusable review skills (secure-code-review, injection, auth/authz, web, API, files, secrets, dependencies, business logic, crypto, IaC, architecture-review, logging-audit-review) |
 | [`workflow/`](workflow) | The 15-stage deterministic review pipeline, plus `routing_rules.yaml` mapping languages/frameworks/entry points to Skills |
-| [`knowledge/`](knowledge) | Shared reference material: OWASP, CWE, severity/priority/confidence/effort standards, framework-specific security guides |
+| [`knowledge/`](knowledge) | Shared reference material: OWASP, CWE, MITRE ATT&CK, NIST CSF 2.0, ISO 27001, severity/priority/confidence/effort standards, framework-specific security guides |
 | [`prompts/`](prompts) | Reusable prompt fragments and report templates |
-| [`scripts/`](scripts) | Deterministic tooling: real scanner wrappers (Semgrep/Gitleaks/Trivy/OSV-Scanner + CISA KEV correlation + CVE age/severity policy), git helpers, discovery heuristics, reporting (priority scoring, Markdown/JSON/SARIF) |
+| [`scripts/`](scripts) | Deterministic tooling: real scanner wrappers (Semgrep/Gitleaks/Trivy/OSV-Scanner + CISA KEV correlation + CVE age/severity policy), git helpers, discovery heuristics, reporting (priority scoring, MITRE ATT&CK/NIST/ISO 27001 alignment, Markdown/JSON/SARIF) |
 | [`schemas/`](schemas) | JSON Schemas for data passed between pipeline stages, including the dual Application-Security / Software-Architecture report axes |
 | [`config/`](config) | Scanner, severity, priority, remediation, exclusion, and pentest-authorization configuration |
 | [`hooks/`](hooks) | `PreToolUse` enforcement scripts backing the read-only policy, wired into both `.claude-plugin/plugin.json` and `.claude/settings.json` |

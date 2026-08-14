@@ -38,6 +38,20 @@ def render_finding(f: dict) -> str:
     if f.get("owasp_category"):
         lines.append(f"| **OWASP** | {f['owasp_category']} |")
     lines.append(f"| **Location** | `{loc.get('file', '')}:{loc.get('line_start', '')}` |")
+
+    mitre = f.get("mitre_attack") or {}
+    if mitre.get("techniques"):
+        techs = ", ".join(f"{t.get('id', '?')} ({t.get('name', '')})" for t in mitre["techniques"])
+        lines.append(f"| **MITRE ATT&CK** | {techs} |")
+
+    compliance = f.get("compliance_mappings") or {}
+    if compliance.get("nist_csf"):
+        nist = ", ".join(f"{c.get('id', '?')} ({c.get('name', '')})" for c in compliance["nist_csf"])
+        lines.append(f"| **NIST CSF 2.0** | {nist} |")
+    if compliance.get("iso27001"):
+        iso = ", ".join(f"{c.get('id', '?')} ({c.get('subject', '')})" for c in compliance["iso27001"])
+        lines.append(f"| **ISO 27001** | {iso} |")
+
     lines.append("")
 
     if f.get("evidence"):

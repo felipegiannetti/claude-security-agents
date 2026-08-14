@@ -16,6 +16,9 @@ Canonical Markdown rendering for a single finding, used by [generate_markdown.py
 | **CWE** | {{cwe}} |
 | **OWASP** | {{owasp_category}} |
 | **Location** | `{{location.file}}:{{location.line_start}}` |
+{{if mitre_attack present: "| **MITRE ATT&CK** | " + mitre_attack.techniques joined as "T1190 - Exploit Public-Facing Application" style entries + " |"}}
+{{if compliance_mappings.nist_csf present: "| **NIST CSF 2.0** | " + compliance_mappings.nist_csf joined as "PR.PS" style entries + " |"}}
+{{if compliance_mappings.iso27001 present: "| **ISO 27001** | " + compliance_mappings.iso27001 joined as "A.8.28" style entries + " |"}}
 
 **Summary**
 

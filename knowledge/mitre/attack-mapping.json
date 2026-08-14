@@ -1,0 +1,164 @@
+{
+  "$comment": "Category -> MITRE ATT&CK Enterprise technique mapping. High-confidence, core-category subset only -- see knowledge/mitre/attack-overview.md for why this is deliberately not exhaustive. Keys match the category strings used in config/severity.config.yaml. A category absent here has no confirmed mapping yet; scripts/reporting/map_compliance.py must never guess one.",
+  "version": "0.1.0",
+  "mappings": {
+    "sql-injection": {
+      "techniques": [
+        {
+          "id": "T1190",
+          "name": "Exploit Public-Facing Application",
+          "tactic": "Initial Access"
+        }
+      ]
+    },
+    "command-injection": {
+      "techniques": [
+        {
+          "id": "T1190",
+          "name": "Exploit Public-Facing Application",
+          "tactic": "Initial Access"
+        },
+        {
+          "id": "T1059",
+          "name": "Command and Scripting Interpreter",
+          "tactic": "Execution"
+        }
+      ]
+    },
+    "code-injection": {
+      "techniques": [
+        {
+          "id": "T1190",
+          "name": "Exploit Public-Facing Application",
+          "tactic": "Initial Access"
+        },
+        {
+          "id": "T1059",
+          "name": "Command and Scripting Interpreter",
+          "tactic": "Execution"
+        }
+      ]
+    },
+    "stored-xss": {
+      "techniques": [
+        {
+          "id": "T1190",
+          "name": "Exploit Public-Facing Application",
+          "tactic": "Initial Access"
+        }
+      ]
+    },
+    "reflected-xss": {
+      "techniques": [
+        {
+          "id": "T1190",
+          "name": "Exploit Public-Facing Application",
+          "tactic": "Initial Access"
+        }
+      ]
+    },
+    "csrf": {
+      "techniques": [
+        {
+          "id": "T1190",
+          "name": "Exploit Public-Facing Application",
+          "tactic": "Initial Access"
+        }
+      ]
+    },
+    "ssrf": {
+      "techniques": [
+        {
+          "id": "T1190",
+          "name": "Exploit Public-Facing Application",
+          "tactic": "Initial Access"
+        }
+      ],
+      "note": "If the SSRF reaches internal-only services, also consider T1210 (Exploitation of Remote Services) for the lateral-movement leg -- record that only when the specific finding's evidence actually demonstrates reaching a second internal service, not as a default addition."
+    },
+    "path-traversal": {
+      "techniques": [
+        {
+          "id": "T1190",
+          "name": "Exploit Public-Facing Application",
+          "tactic": "Initial Access"
+        }
+      ]
+    },
+    "unrestricted-file-upload": {
+      "techniques": [
+        {
+          "id": "T1190",
+          "name": "Exploit Public-Facing Application",
+          "tactic": "Initial Access"
+        }
+      ]
+    },
+    "insecure-deserialization": {
+      "techniques": [
+        {
+          "id": "T1190",
+          "name": "Exploit Public-Facing Application",
+          "tactic": "Initial Access"
+        }
+      ]
+    },
+    "broken-object-level-authorization": {
+      "techniques": [
+        {
+          "id": "T1190",
+          "name": "Exploit Public-Facing Application",
+          "tactic": "Initial Access"
+        }
+      ]
+    },
+    "broken-function-level-authorization": {
+      "techniques": [
+        {
+          "id": "T1190",
+          "name": "Exploit Public-Facing Application",
+          "tactic": "Initial Access"
+        }
+      ]
+    },
+    "authentication-bypass": {
+      "techniques": [
+        {
+          "id": "T1190",
+          "name": "Exploit Public-Facing Application",
+          "tactic": "Initial Access"
+        },
+        {
+          "id": "T1078",
+          "name": "Valid Accounts",
+          "tactic": "Defense Evasion, Persistence, Privilege Escalation, Initial Access"
+        }
+      ],
+      "note": "T1078 applies once the bypass results in the attacker actually operating as a legitimate account, not merely to the bypass technique itself -- do not attach it to a bypass that only demonstrates access without impersonating a specific account."
+    },
+    "hardcoded-credential-live": {
+      "techniques": [
+        {
+          "id": "T1552.001",
+          "name": "Unsecured Credentials: Credentials In Files",
+          "tactic": "Credential Access"
+        },
+        {
+          "id": "T1190",
+          "name": "Exploit Public-Facing Application",
+          "tactic": "Initial Access"
+        }
+      ]
+    },
+    "vulnerable-dependency": {
+      "techniques": [
+        {
+          "id": "T1190",
+          "name": "Exploit Public-Facing Application",
+          "tactic": "Initial Access"
+        }
+      ],
+      "note": "This is for exploiting a KNOWN vulnerability in an outdated dependency. It is NOT T1195 (Supply Chain Compromise) unless the finding specifically demonstrates the dependency itself was tampered with (a different, much rarer finding) -- never apply T1195 by default."
+    }
+  }
+}

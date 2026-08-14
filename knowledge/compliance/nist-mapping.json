@@ -1,0 +1,143 @@
+{
+  "$comment": "Category -> NIST Cybersecurity Framework 2.0 mapping, function/category level (not the more granular subcategory/outcome level, which the project has not spot-checked with high enough confidence for this first pass -- see knowledge/compliance/compliance-overview.md). Keys match config/severity.config.yaml category strings.",
+  "version": "0.1.0",
+  "framework": "NIST CSF 2.0",
+  "mappings": {
+    "sql-injection": {
+      "functions": [
+        {
+          "id": "PR.PS",
+          "name": "Platform Security"
+        }
+      ]
+    },
+    "command-injection": {
+      "functions": [
+        {
+          "id": "PR.PS",
+          "name": "Platform Security"
+        }
+      ]
+    },
+    "code-injection": {
+      "functions": [
+        {
+          "id": "PR.PS",
+          "name": "Platform Security"
+        }
+      ]
+    },
+    "stored-xss": {
+      "functions": [
+        {
+          "id": "PR.PS",
+          "name": "Platform Security"
+        }
+      ]
+    },
+    "reflected-xss": {
+      "functions": [
+        {
+          "id": "PR.PS",
+          "name": "Platform Security"
+        }
+      ]
+    },
+    "csrf": {
+      "functions": [
+        {
+          "id": "PR.AA",
+          "name": "Identity Management, Authentication and Access Control"
+        }
+      ]
+    },
+    "ssrf": {
+      "functions": [
+        {
+          "id": "PR.PS",
+          "name": "Platform Security"
+        }
+      ]
+    },
+    "path-traversal": {
+      "functions": [
+        {
+          "id": "PR.PS",
+          "name": "Platform Security"
+        }
+      ]
+    },
+    "unrestricted-file-upload": {
+      "functions": [
+        {
+          "id": "PR.PS",
+          "name": "Platform Security"
+        }
+      ]
+    },
+    "insecure-deserialization": {
+      "functions": [
+        {
+          "id": "PR.PS",
+          "name": "Platform Security"
+        }
+      ]
+    },
+    "broken-object-level-authorization": {
+      "functions": [
+        {
+          "id": "PR.AA",
+          "name": "Identity Management, Authentication and Access Control"
+        }
+      ]
+    },
+    "broken-function-level-authorization": {
+      "functions": [
+        {
+          "id": "PR.AA",
+          "name": "Identity Management, Authentication and Access Control"
+        }
+      ]
+    },
+    "authentication-bypass": {
+      "functions": [
+        {
+          "id": "PR.AA",
+          "name": "Identity Management, Authentication and Access Control"
+        }
+      ]
+    },
+    "hardcoded-credential-live": {
+      "functions": [
+        {
+          "id": "PR.AA",
+          "name": "Identity Management, Authentication and Access Control"
+        },
+        {
+          "id": "PR.DS",
+          "name": "Data Security"
+        }
+      ]
+    },
+    "weak-cryptography": {
+      "functions": [
+        {
+          "id": "PR.DS",
+          "name": "Data Security"
+        }
+      ]
+    },
+    "vulnerable-dependency": {
+      "functions": [
+        {
+          "id": "ID.RA",
+          "name": "Risk Assessment"
+        },
+        {
+          "id": "PR.PS",
+          "name": "Platform Security"
+        }
+      ]
+    }
+  }
+}

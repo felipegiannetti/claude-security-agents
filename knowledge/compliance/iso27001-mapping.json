@@ -1,0 +1,147 @@
+{
+  "$comment": "Category -> ISO/IEC 27001:2022 Annex A control mapping. Control IDs and short paraphrased subjects only -- never the standard's own descriptive text, which is copyrighted and paywalled. See knowledge/compliance/compliance-overview.md for the confidence caveat and how to verify against a licensed copy of the standard. Keys match config/severity.config.yaml category strings.",
+  "version": "0.1.0",
+  "framework": "ISO/IEC 27001:2022 Annex A",
+  "mappings": {
+    "sql-injection": {
+      "controls": [
+        {
+          "id": "A.8.28",
+          "subject": "Secure coding"
+        }
+      ]
+    },
+    "command-injection": {
+      "controls": [
+        {
+          "id": "A.8.28",
+          "subject": "Secure coding"
+        }
+      ]
+    },
+    "code-injection": {
+      "controls": [
+        {
+          "id": "A.8.28",
+          "subject": "Secure coding"
+        }
+      ]
+    },
+    "stored-xss": {
+      "controls": [
+        {
+          "id": "A.8.28",
+          "subject": "Secure coding"
+        }
+      ]
+    },
+    "reflected-xss": {
+      "controls": [
+        {
+          "id": "A.8.28",
+          "subject": "Secure coding"
+        }
+      ]
+    },
+    "csrf": {
+      "controls": [
+        {
+          "id": "A.8.28",
+          "subject": "Secure coding"
+        },
+        {
+          "id": "A.8.5",
+          "subject": "Secure authentication"
+        }
+      ]
+    },
+    "ssrf": {
+      "controls": [
+        {
+          "id": "A.8.28",
+          "subject": "Secure coding"
+        }
+      ]
+    },
+    "path-traversal": {
+      "controls": [
+        {
+          "id": "A.8.28",
+          "subject": "Secure coding"
+        },
+        {
+          "id": "A.8.3",
+          "subject": "Information access restriction"
+        }
+      ]
+    },
+    "unrestricted-file-upload": {
+      "controls": [
+        {
+          "id": "A.8.28",
+          "subject": "Secure coding"
+        }
+      ]
+    },
+    "insecure-deserialization": {
+      "controls": [
+        {
+          "id": "A.8.28",
+          "subject": "Secure coding"
+        }
+      ]
+    },
+    "broken-object-level-authorization": {
+      "controls": [
+        {
+          "id": "A.8.3",
+          "subject": "Information access restriction"
+        }
+      ]
+    },
+    "broken-function-level-authorization": {
+      "controls": [
+        {
+          "id": "A.8.2",
+          "subject": "Privileged access rights"
+        }
+      ]
+    },
+    "authentication-bypass": {
+      "controls": [
+        {
+          "id": "A.8.5",
+          "subject": "Secure authentication"
+        }
+      ]
+    },
+    "hardcoded-credential-live": {
+      "controls": [
+        {
+          "id": "A.8.12",
+          "subject": "Data leakage prevention"
+        },
+        {
+          "id": "A.8.24",
+          "subject": "Use of cryptography"
+        }
+      ]
+    },
+    "weak-cryptography": {
+      "controls": [
+        {
+          "id": "A.8.24",
+          "subject": "Use of cryptography"
+        }
+      ]
+    },
+    "vulnerable-dependency": {
+      "controls": [
+        {
+          "id": "A.8.8",
+          "subject": "Management of technical vulnerabilities"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,21 @@
+# Toggles which compliance/attacker-behavior frameworks get attached to
+# confirmed findings during 14_remediation_analysis. See
+# scripts/reporting/map_compliance.py and
+# knowledge/mitre/attack-overview.md / knowledge/compliance/compliance-overview.md
+# for what each framework covers and why the mapping is deliberately not
+# exhaustive.
+version: "0.1.0"
+
+enabled: true
+
+frameworks:
+  mitre_attack: true
+  nist_csf: true
+  iso27001: true
+
+# Paths are relative to the repo root; override only if you maintain your
+# own expanded mapping files.
+mapping_files:
+  mitre_attack: "knowledge/mitre/attack-mapping.json"
+  nist_csf: "knowledge/compliance/nist-mapping.json"
+  iso27001: "knowledge/compliance/iso27001-mapping.json"
