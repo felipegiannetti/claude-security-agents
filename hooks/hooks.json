@@ -6,7 +6,10 @@
         "hooks": [
           {
             "type": "command",
-            "command": "python hooks/deny_write_tools.py"
+            "command": "python",
+            "args": [
+              "${CLAUDE_PLUGIN_ROOT}/hooks/deny_write_tools.py"
+            ]
           }
         ]
       },
@@ -15,7 +18,10 @@
         "hooks": [
           {
             "type": "command",
-            "command": "python hooks/deny_mutating_bash.py"
+            "command": "python",
+            "args": [
+              "${CLAUDE_PLUGIN_ROOT}/hooks/deny_mutating_bash.py"
+            ]
           }
         ]
       }

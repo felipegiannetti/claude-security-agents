@@ -91,7 +91,7 @@
       "PowerShell(npm uninstall *)",
       "PowerShell(npm update *)",
 
-      "PowerShell(yarn add *)",
+      "cmPowerShell(yarn add *)",
       "PowerShell(yarn remove *)",
 
       "PowerShell(pnpm add *)",
