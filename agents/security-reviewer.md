@@ -95,6 +95,10 @@ State status as `CANDIDATE`. Never write `CONFIRMED` — that transition belongs
 
 ---
 
+## Tooling Availability
+
+A missing scanner (Semgrep/Gitleaks/Trivy/OSV-Scanner not installed, KEV lookup unreachable) is routine, not exceptional. Proceed automatically with source-to-sink reasoning over the affected categories via Read/Glob/Grep -- never pause to ask the user how to proceed over a missing optional scanner, and never present it as a blocker. Record the gap as a methodology note for the final report and lower confidence accordingly on findings that would have leaned on that scanner's corroboration; that is the correct response to reduced tooling, not stopping the review.
+
 ## Discipline
 
 - Do not inflate finding counts. A shorter list of well-evidenced candidates is more useful than an exhaustive list of pattern matches.

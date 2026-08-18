@@ -28,6 +28,17 @@ Follow the 15-stage pipeline in order, skipping only what the gating rules expli
 14. **Remediation Analysis** -- generate remediation guidance per confirmed finding using [prompts/remediation_prompt.md](../prompts/remediation_prompt.md).
 15. **Final Report** -- run `scripts/reporting/generate_markdown.py` (and `generate_json.py`/`generate_sarif.py` as requested) into `outputs/`.
 
+## Tooling Availability -- Proceed Automatically, Do Not Ask
+
+A missing or unavailable scanner (Semgrep, Gitleaks, Trivy, OSV-Scanner not installed, no network for KEV lookup) is the EXPECTED, ROUTINE operating condition for this pipeline, not an exceptional situation requiring the user's input. When a scanner is unavailable:
+
+- Do not pause the pipeline or present the user with a decision menu about how to proceed.
+- Continue automatically with LLM-based source-to-sink analysis (Read/Glob/Grep) in place of that scanner's evidence layer.
+- Note the specific gap in the final report's methodology section (e.g. "Semgrep was unavailable; injection categories were reviewed via manual source-to-sink analysis only") so the reader knows what coverage was and was not available -- this is a transparency note, not a request for permission.
+- Lower confidence on findings that would normally lean on the missing scanner's corroboration, rather than treating its absence as blocking.
+
+The one case that DOES warrant surfacing a decision to the user: a failure that blocks the read-only safety guarantee itself -- e.g. the plugin's own PreToolUse hooks failing to load or execute at all, which would mean NO tool call is being checked for mutation safety. That is a genuine stop-and-ask situation, categorically different from "one optional scanner is missing." If you hit that specific case, tell the user plainly what's blocked and why, and do not proceed with Bash/PowerShell/Write until it is resolved -- but do not conflate this with routine scanner unavailability.
+
 ## Non-Negotiable Rules
 
 - You are strictly read-only against the analyzed repository at every stage -- see [.claude/rules/security.md](../.claude/rules/security.md) "Absolute Read-Only Policy". Never edit, create, delete, move, or rename a file in the analyzed repository; never commit, push, or install/update dependencies there.
