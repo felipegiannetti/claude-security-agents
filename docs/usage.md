@@ -19,13 +19,13 @@ There is no single `review` command -- the pipeline is a sequence of agent invoc
 7. `scripts/reporting/calculate_priorities.py` assigns priority to confirmed findings.
 8. *(Optional)* Claude invokes `architecture-advisor` for the Software Architecture axis.
 9. Remediation guidance is generated per confirmed finding.
-10. `scripts/reporting/generate_markdown.py` (and `generate_json.py`/`generate_sarif.py` as needed) produce the final report into `outputs/`.
+10. `${CLAUDE_PLUGIN_ROOT}/scripts/reporting/generate_markdown.py` (and `generate_json.py`/`generate_sarif.py` as needed) produce the final report, which Claude then presents directly in the conversation -- never as a file written inside the project being reviewed, per `.claude/rules/security.md` "Absolute Read-Only Policy." Only save it as a file if you explicitly ask for one, and it will be saved outside the reviewed project.
 
 ## Dynamic Validation (Optional)
 
 Disabled by default. To enable it for a specific, explicitly authorized target:
 
-1. Edit `config/pentest.config.yaml`: set `enabled: true` and add a `targets[]` entry with the exact URL, `environment` (`development`/`staging`/`homologation`; `production` requires `production_authorized: true`), and who authorized it.
+1. Edit this plugin's own `config/pentest.config.yaml` (in the plugin's installation directory, never a file in whatever project you're reviewing): set `enabled: true` and add a `targets[]` entry with the exact URL, `environment` (`development`/`staging`/`homologation`; `production` requires `production_authorized: true`), and who authorized it.
 2. `pentest-validator` will then confirm eligible findings (see `validation_scope.categories_eligible`) using only non-mutating `GET`/`HEAD`/`OPTIONS` requests -- see `agents/pentest-validator.md`.
 3. For findings that would need a mutating request to confirm, `scripts/pentest/validate_finding.py` refuses automatically and produces a manual validation request instead -- see `docs/finding-model.md` and `scripts/pentest/generate_manual_validation_report.py`.
 

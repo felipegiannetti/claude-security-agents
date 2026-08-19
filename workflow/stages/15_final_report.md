@@ -30,7 +30,7 @@ Produce the deliverable: a report that helps the reader decide what to fix first
 3. Render the executive summary (audience: CTOs, managers, business stakeholders) and the technical body (audience: developers, security engineers) per [report.schema.json](../../schemas/report.schema.json).
 4. Build the security remediation roadmap: immediate (P0), short-term (P1), medium-term (P2–P3), hardening (P4 and general recommendations).
 5. Build the architecture roadmap separately, per `ARCH-P0`–`ARCH-P3`, phrased as gradual evolution steps, not a single "rewrite everything" recommendation (see [architecture-advisor.md](../../agents/architecture-advisor.md)).
-6. Emit the requested format(s) into `outputs/`.
+6. Present the rendered report directly in the conversation. Never create a file inside the analyzed repository to hold it -- see CLAUDE.md's `outputs/` section and `.claude/rules/security.md` "Absolute Read-Only Policy," which forbids creating files inside the analyzed repository with no exception for the report itself. Only if the user explicitly asks for a saved file, write it OUTSIDE the analyzed project (a path they specify, or a scratch/temp location) and tell them exactly where. A missing `outputs/`, `config/`, or any other directory in the analyzed project is never a reason to stop or fail this stage -- the target project is never expected to mirror this plugin's own structure.
 
 ## Outputs
 
@@ -40,7 +40,7 @@ A report with two clearly separated sections:
 - **Software Architecture**: current-state summary, strengths, structural problems, security-relevant technical debt, recommended organization, architecture recommendations (`ARCH-NNN`) with benefits/costs/risks/complexity, and a phased architecture roadmap.
 - A **Final Conclusion** tying both axes together.
 
-In Markdown, JSON, and/or SARIF (Application Security axis) per request.
+In Markdown, JSON, and/or SARIF (Application Security axis) per request. Markdown is normally rendered directly in the conversation; if JSON/SARIF is requested as a saved file, the same rule applies -- outside the analyzed project, never inside it.
 
 ## Success Criteria
 

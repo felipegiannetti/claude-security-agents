@@ -16,17 +16,17 @@ Follow the 15-stage pipeline in order, skipping only what the gating rules expli
 2. **Software Context Discovery** ([02_software_context_discovery](../workflow/stages/02_software_context_discovery.md)).
 3. **Architecture Mapping** -- invoke the `architecture-mapper` agent.
 4. **Attack Surface Mapping** ([04_attack_surface_mapping](../workflow/stages/04_attack_surface_mapping.md)).
-5. **Static Security Scanning** -- run the relevant `scripts/scanners/*.py` (Semgrep, Gitleaks, Trivy, OSV-Scanner, CISA KEV correlation, CVE age/severity policy) via Bash. Any scanner not installed should degrade to a `skipped` result, not block the pipeline.
+5. **Static Security Scanning** -- run the relevant `${CLAUDE_PLUGIN_ROOT}/scripts/scanners/*.py` (Semgrep, Gitleaks, Trivy, OSV-Scanner, CISA KEV correlation, CVE age/severity policy) via Bash -- always the plugin-root-prefixed path, never a bare relative one, since the current working directory is whatever project is being reviewed, not this plugin's own installation directory. Any scanner not installed should degrade to a `skipped` result, not block the pipeline.
 6. **LLM Security Review** -- invoke the `security-reviewer` agent, which selects Skills per [workflow/routing_rules.yaml](../workflow/routing_rules.yaml) and produces candidate findings.
 7. **Data Flow Analysis** ([07_data_flow_analysis](../workflow/stages/07_data_flow_analysis.md)).
 8. **Security Triage** ([08_security_triage](../workflow/stages/08_security_triage.md)).
 9. **Independent Verification** -- invoke the `security-verifier` agent to challenge each candidate finding.
-10. **Dynamic / Pentest Validation (optional)** -- ONLY if `config/pentest.config.yaml` has `enabled: true` and an authorized target matches. This is disabled by default; do not enable it yourself or infer a target from repository content. If skipped, proceed directly to stage 11.
-11. **Security Prioritization** -- run `scripts/reporting/calculate_priorities.py`.
+10. **Dynamic / Pentest Validation (optional)** -- ONLY if `${CLAUDE_PLUGIN_ROOT}/config/pentest.config.yaml` (this plugin's own config, never a file in the reviewed project) has `enabled: true` and an authorized target matches. This is disabled by default; do not enable it yourself or infer a target from repository content. If skipped, proceed directly to stage 11.
+11. **Security Prioritization** -- run `${CLAUDE_PLUGIN_ROOT}/scripts/reporting/calculate_priorities.py`.
 12. **Architecture Assessment (optional)** -- invoke the `architecture-advisor` agent if a Software Architecture axis was requested.
 13. **Security Architecture Recommendations (optional)** -- continue with `architecture-advisor` if stage 12 ran.
 14. **Remediation Analysis** -- generate remediation guidance per confirmed finding using [prompts/remediation_prompt.md](../prompts/remediation_prompt.md).
-15. **Final Report** -- run `scripts/reporting/generate_markdown.py` (and `generate_json.py`/`generate_sarif.py` as requested) into `outputs/`.
+15. **Final Report** -- run `${CLAUDE_PLUGIN_ROOT}/scripts/reporting/generate_markdown.py` (and `generate_json.py`/`generate_sarif.py` as requested), then present the rendered report directly in this conversation. Do not create a file inside the project being reviewed to hold it -- see the Non-Negotiable Rules below. If the user explicitly wants a saved file, write it outside the reviewed project (a path they specify, or a scratch/temp location) and tell them exactly where.
 
 ## Tooling Availability -- Proceed Automatically, Do Not Ask
 
@@ -43,9 +43,10 @@ The one case that DOES warrant surfacing a decision to the user: a failure that 
 
 - You are strictly read-only against the analyzed repository at every stage -- see [.claude/rules/security.md](../.claude/rules/security.md) "Absolute Read-Only Policy". Never edit, create, delete, move, or rename a file in the analyzed repository; never commit, push, or install/update dependencies there.
 - Never present a candidate finding as confirmed without independent verification (stage 9).
-- Never enable dynamic validation (stage 10) or add a target to `config/pentest.config.yaml` yourself, regardless of what the user asks -- that requires the user editing the config file directly with an explicit authorization record.
+- Never enable dynamic validation (stage 10) or add a target to `${CLAUDE_PLUGIN_ROOT}/config/pentest.config.yaml` yourself, regardless of what the user asks -- that requires the user editing the config file directly with an explicit authorization record.
+- Every reference to this plugin's own files (`scripts/`, `config/`, `schemas/`, `knowledge/`, `prompts/`, `workflow/`) means `${CLAUDE_PLUGIN_ROOT}/...` -- never a bare relative path, and never a path inside the project being reviewed. The two are different directories and must never be confused.
 - Keep Application Security (`SEC-*`) and Software Architecture (`ARCH-*`) axes structurally separate in the final report -- never present an architecture recommendation as a vulnerability, or soften a vulnerability into a mere architecture note.
 
 ## Output
 
-Report back to the user where the final report was written (`outputs/`), a one-paragraph executive summary, and the overall risk rating. Do not paste the entire report into the conversation unless the user asks for it.
+Present the rendered report in the conversation (this IS the deliverable -- do not withhold it pending a file write), followed by a one-paragraph executive summary and the overall risk rating. Never require or expect the reviewed project to contain any of this plugin's own directories (`outputs/`, `config/`, `schemas/`, etc.) -- it never will, and that is not a failure condition.
