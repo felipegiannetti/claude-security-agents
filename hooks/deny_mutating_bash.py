@@ -1,7 +1,14 @@
 #!/usr/bin/env python3
 """Deny Mutating Bash -- PreToolUse hook for Bash and PowerShell tools.
-Blocks mutating commands against the analyzed repository. Second layer
-on top of settings.json deny list. Pattern match, not a shell parser --
+
+Blocks mutating commands, but ONLY while one of this plugin's own
+subagents (architecture-mapper, security-reviewer, security-verifier,
+architecture-advisor, pentest-validator) is the one issuing the command --
+never the user's main Claude Code session doing normal, unrelated work in
+some other project. Installing this plugin must not turn off Bash/
+PowerShell mutation for everything the user does afterward.
+
+Pattern match, not a shell parser -- once scoped to our own agents,
 over-block a read-only command rather than under-block a mutating one.
 Not a sandbox: general-purpose interpreter invocation is a known gap this
 revision specifically targets (see the interpreter-escape patterns below).
@@ -10,6 +17,23 @@ revision specifically targets (see the interpreter-escape patterns below).
 import json
 import re
 import sys
+
+OUR_AGENT_NAMES = (
+    'architecture-mapper',
+    'security-reviewer',
+    'security-verifier',
+    'architecture-advisor',
+    'pentest-validator',
+)
+
+
+def is_our_agent(payload: dict) -> bool:
+    agent_id = payload.get('agent_id')
+    if not agent_id:
+        return False  # no subagent context -- this is the main session
+    agent_type = (payload.get('agent_type') or '').lower()
+    return any(name in agent_type for name in OUR_AGENT_NAMES)
+
 
 _ANCHOR = r'(?:^|[;&|]\s*)'
 
@@ -88,8 +112,11 @@ def main():
     try:
         payload = json.loads(sys.stdin.read() or "{}")
     except json.JSONDecodeError:
-        print("Blocked: could not parse hook input; failing closed.", file=sys.stderr)
-        return 2
+        return 0  # can't identify the caller -- allow rather than block main-session work
+
+    if not is_our_agent(payload):
+        return 0
+
     command = (payload.get("tool_input") or {}).get("command", "")
     if not command:
         return 0
