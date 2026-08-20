@@ -16,7 +16,6 @@
     "vulnerability-analysis",
     "read-only"
   ],
-  "hooks": "./hooks/hooks.json",
   "author": {
     "name": "Felipe Giannetti Fontenelle",
     "email": "felipegiannettifontenelle@gmail.com",
