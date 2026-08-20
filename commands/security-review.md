@@ -26,7 +26,11 @@ Follow the 15-stage pipeline in order, skipping only what the gating rules expli
 12. **Architecture Assessment (optional)** -- invoke the `architecture-advisor` agent if a Software Architecture axis was requested.
 13. **Security Architecture Recommendations (optional)** -- continue with `architecture-advisor` if stage 12 ran.
 14. **Remediation Analysis** -- generate remediation guidance per confirmed finding using [prompts/remediation_prompt.md](../prompts/remediation_prompt.md).
-15. **Final Report** -- run `${CLAUDE_PLUGIN_ROOT}/scripts/reporting/generate_markdown.py` (and `generate_json.py`/`generate_sarif.py` as requested), then present the rendered report directly in this conversation. Do not create a file inside the project being reviewed to hold it -- see the Non-Negotiable Rules below. If the user explicitly wants a saved file, write it outside the reviewed project (a path they specify, or a scratch/temp location) and tell them exactly where.
+15. **Final Report** -- run `${CLAUDE_PLUGIN_ROOT}/scripts/reporting/generate_markdown.py` (and `generate_json.py`/`generate_sarif.py` as requested), present the rendered report directly in this conversation, AND always save it as a file -- this is the default, not something the user needs to ask for. Never write that file inside the project being reviewed (see the Non-Negotiable Rules below). Instead:
+    - Run `${CLAUDE_PLUGIN_ROOT}/scripts/reporting/resolve_report_path.py --project-name "<name of the reviewed project>"` to get a deterministic, always-outside-the-project save directory (default `~/SecurityReviews/<project>-<timestamp>/`, created automatically).
+    - Write `security-review-report.md` (and `.json`/`.sarif` as requested) into that directory.
+    - Tell the user the exact absolute path in your response, formatted as a clickable file link where the interface supports it.
+    - Attempt to open it automatically for the user (e.g. `start` on Windows, `open` on macOS, `xdg-open` on Linux, via Bash) -- if that's not possible in the current environment, the reported path is still sufficient; do not treat a failed auto-open as an error worth surfacing.
 
 ## Tooling Availability -- Proceed Automatically, Do Not Ask
 
@@ -49,4 +53,4 @@ The one case that DOES warrant surfacing a decision to the user: a failure that 
 
 ## Output
 
-Present the rendered report in the conversation (this IS the deliverable -- do not withhold it pending a file write), followed by a one-paragraph executive summary and the overall risk rating. Never require or expect the reviewed project to contain any of this plugin's own directories (`outputs/`, `config/`, `schemas/`, etc.) -- it never will, and that is not a failure condition.
+Present the rendered report in the conversation, tell the user the exact path of the always-saved file (see stage 15) and attempt to open it for them, followed by a one-paragraph executive summary and the overall risk rating. Never require or expect the reviewed project to contain any of this plugin's own directories (`outputs/`, `config/`, `schemas/`, etc.) -- it never will, and that is not a failure condition.

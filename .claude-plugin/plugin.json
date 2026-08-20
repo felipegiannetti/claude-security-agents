@@ -1,9 +1,9 @@
 {
   "$schema": "https://json.schemastore.org/claude-code-plugin-manifest.json",
-  "name": "security-review-agent",
-  "displayName": "Security Review Agent",
+  "name": "sentinelfg",
+  "displayName": "SentinelFG",
   "version": "0.1.0",
-  "description": "Read-only AI-assisted application security review plugin for Claude Code. Analyzes source code, architecture, dependencies, configuration and security controls to identify, verify, prioritize and document security vulnerabilities without modifying the analyzed project.",
+  "description": "SentinelFG -- read-only AI-assisted application security review plugin for Claude Code. Analyzes source code, architecture, dependencies, configuration and security controls to identify, verify, prioritize and document security vulnerabilities without modifying the analyzed project.",
   "keywords": [
     "security",
     "cybersecurity",

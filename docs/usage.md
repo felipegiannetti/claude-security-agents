@@ -19,7 +19,7 @@ There is no single `review` command -- the pipeline is a sequence of agent invoc
 7. `scripts/reporting/calculate_priorities.py` assigns priority to confirmed findings.
 8. *(Optional)* Claude invokes `architecture-advisor` for the Software Architecture axis.
 9. Remediation guidance is generated per confirmed finding.
-10. `${CLAUDE_PLUGIN_ROOT}/scripts/reporting/generate_markdown.py` (and `generate_json.py`/`generate_sarif.py` as needed) produce the final report, which Claude then presents directly in the conversation -- never as a file written inside the project being reviewed, per `.claude/rules/security.md` "Absolute Read-Only Policy." Only save it as a file if you explicitly ask for one, and it will be saved outside the reviewed project.
+10. `${CLAUDE_PLUGIN_ROOT}/scripts/reporting/generate_markdown.py` (and `generate_json.py`/`generate_sarif.py` as needed) produce the final report. Claude presents it directly in the conversation AND always saves it as a file automatically -- via `${CLAUDE_PLUGIN_ROOT}/scripts/reporting/resolve_report_path.py`, which always resolves to a location OUTSIDE the reviewed project (default `~/SecurityReviews/<project>-<timestamp>/`), never inside it, per `.claude/rules/security.md` "Absolute Read-Only Policy." Claude reports the exact path and attempts to open the file for you.
 
 ## Dynamic Validation (Optional)
 

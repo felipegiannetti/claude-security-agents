@@ -10,6 +10,7 @@ Produce the deliverable: a report that helps the reader decide what to fix first
 - [generate_json.py](../../scripts/reporting/generate_json.py)
 - [generate_sarif.py](../../scripts/reporting/generate_sarif.py) — Application Security axis only; SARIF has no meaningful representation for architecture recommendations.
 - [calculate_security_posture.py](../../scripts/reporting/calculate_security_posture.py) — overall risk rollup.
+- [resolve_report_path.py](../../scripts/reporting/resolve_report_path.py) — deterministic, always-outside-the-analyzed-project save location.
 
 ## Prompts / Templates
 
@@ -30,7 +31,7 @@ Produce the deliverable: a report that helps the reader decide what to fix first
 3. Render the executive summary (audience: CTOs, managers, business stakeholders) and the technical body (audience: developers, security engineers) per [report.schema.json](../../schemas/report.schema.json).
 4. Build the security remediation roadmap: immediate (P0), short-term (P1), medium-term (P2–P3), hardening (P4 and general recommendations).
 5. Build the architecture roadmap separately, per `ARCH-P0`–`ARCH-P3`, phrased as gradual evolution steps, not a single "rewrite everything" recommendation (see [architecture-advisor.md](../../agents/architecture-advisor.md)).
-6. Present the rendered report directly in the conversation. Never create a file inside the analyzed repository to hold it -- see CLAUDE.md's `outputs/` section and `.claude/rules/security.md` "Absolute Read-Only Policy," which forbids creating files inside the analyzed repository with no exception for the report itself. Only if the user explicitly asks for a saved file, write it OUTSIDE the analyzed project (a path they specify, or a scratch/temp location) and tell them exactly where. A missing `outputs/`, `config/`, or any other directory in the analyzed project is never a reason to stop or fail this stage -- the target project is never expected to mirror this plugin's own structure.
+6. Present the rendered report directly in the conversation, AND always save it as a file -- this is automatic, not conditional on the user asking. Never create that file inside the analyzed repository -- see CLAUDE.md's `outputs/` section and `.claude/rules/security.md` "Absolute Read-Only Policy," which forbids creating files inside the analyzed repository with no exception for the report. Use `scripts/reporting/resolve_report_path.py --project-name <name>` to get a deterministic save directory outside the analyzed project (default `~/SecurityReviews/<project>-<timestamp>/`), write the report there, report the exact path to the user with a clickable link where supported, and attempt to auto-open it. A missing `outputs/`, `config/`, or any other directory in the analyzed project is never a reason to stop or fail this stage -- the target project is never expected to mirror this plugin's own structure.
 
 ## Outputs
 

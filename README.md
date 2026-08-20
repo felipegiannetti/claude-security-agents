@@ -1,6 +1,6 @@
-# claude-security-agents
+# SentinelFG
 
-AI-powered application security review agents and skills for Claude Code.
+AI-powered application security review agents and skills for Claude Code -- plugin name `sentinelfg`, repository `claude-security-agents`.
 
 See [CLAUDE.md](CLAUDE.md) for the full architecture and design principles. Quick map:
 
@@ -24,12 +24,12 @@ This repo is a self-hosted Claude Code plugin marketplace (see `.claude-plugin/m
 
 ```
 /plugin marketplace add felipegiannetti/claude-security-agents
-/plugin install security-review-agent@security-review-agent
+/plugin install sentinelfg@sentinelfg
 ```
 
 This is a one-time, per-user setup -- it registers at `~/.claude/plugins/known_marketplaces.json` and the plugin (its agents, Skills, `/security-review` command, and safety hooks) becomes available in every project you open afterward, not just one. Update later with `/plugin marketplace update`.
 
-Once installed, run `/security-review` inside any repository you want reviewed, or just describe the scope in conversation -- see [docs/usage.md](docs/usage.md).
+Once installed, run `/sentinelfg:security-review` inside any repository you want reviewed (Claude Code namespaces plugin commands under the plugin name -- this avoids colliding with Claude Code's own built-in `/security-review`), or just describe the scope in conversation -- see [docs/usage.md](docs/usage.md).
 
 ## Author
 
